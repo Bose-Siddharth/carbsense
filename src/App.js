@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from './Pages/Dashboard';
 import Login from './Pages/Login';
 import Monitor from './Pages/Monitor';
-// import UserRegistration from './Pages/Admin/UserRegistration';
+import DeviceList from './Pages/DeviceList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PrivateRoutes from './Utils/PrivateRoutes';
 
@@ -13,7 +13,7 @@ function App() {
         <Route path="/sign-in" element={<Login />} />
         <Route path="/" exact element={<PrivateRoutes />}>
           <Route path="/" exact element={<Dashboard />} />
-          {/* <Route path="user-register" element={<UserRegistration />} /> */}
+          <Route path="device-list" element={<DeviceList />} />
           <Route path="monitor" element={<Monitor />} />
         </Route>
       </Routes>
