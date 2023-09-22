@@ -72,7 +72,7 @@ function index() {
                   ? `text-[#fff] whitespace-pre duration-500 ${
                       !active && 'opacity-0 translate-x-28 overflow-hidden'
                     }`
-                  : `text-[#666666] whitespace-pre duration-500 ${
+                  : `text-[#666] whitespace-pre duration-500 ${
                       !active && 'opacity-0 translate-x-28 overflow-hidden'
                     }`
               }`}
