@@ -1,5 +1,7 @@
 import React from 'react';
 import DropDownNotification from '../../Components/DropDownNotification';
+import Measurements from '../../Components/Monitor/Measurements';
+import OilLevel from '../../Components/Monitor/OilLevel';
 
 function index() {
   return (
@@ -14,8 +16,12 @@ function index() {
         </div>
       </div>
       <div className="flex gap-5">
-        <div className="bg-white w-[50%] h-full">1</div>
-        <div className="bg-white w-[25%] h-full">2</div>
+        <div className="bg-white w-[50%] h-96 rounded-2xl">
+          <Measurements />
+        </div>
+        <div className="bg-white w-[25%] h-96 rounded-2xl">
+          <OilLevel />
+        </div>
         <div className="bg-white w-[25%] h-full">3</div>
       </div>
       <div className="flex gap-5">
