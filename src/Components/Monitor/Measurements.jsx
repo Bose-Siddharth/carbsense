@@ -10,7 +10,7 @@ function Measurements() {
         <div className="p-8 rounded-lg">
           <h1 className="text-3xl font-medium mb-8 text-blue-900">Voltage Measurements</h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
             <div className="bg-pink-100 p-4 rounded-lg shadow">
               {/* <i className="fa-solid fa-bolt rounded-full bg-pink-400 text-white p-3 mb-3"></i> */}
 
