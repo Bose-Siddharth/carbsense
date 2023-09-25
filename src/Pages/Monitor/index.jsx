@@ -1,10 +1,15 @@
 import React from 'react';
 import Measurements from '../../Components/Monitor/Measurements';
+import OilLevel from '../../Components/Monitor/OilLevel';
 
 function index() {
   return (
     <div>
-      <Measurements />
+      <div className="flex">
+        <Measurements />
+        <OilLevel />
+      </div>
+      <div></div>
     </div>
   );
 }
