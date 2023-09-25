@@ -1,9 +1,19 @@
 .dropDownProfile {
   position: absolute;
-  top: 50px;
-  right: 200px;
-  border: 2px solid #ccc;
-  width: 300px;
+  top: 8%;
+  right: 8%;
+  background-color: aliceblue;
+  width: 350px;
+  height: fit-content;
   border-radius: 10px;
-  padding: 5px;
+  padding: 10px;
+}
+
+.dropDownProfile::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  border: 10px solid transparent;
+  border-bottom-color: aliceblue;
 }
