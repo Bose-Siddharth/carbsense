@@ -7,7 +7,7 @@ function Measurements() {
       <div className="hidden sm:block"></div>
 
       <div className="container mx-auto p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md">
+        <div className="p-8 rounded-lg">
           <h1 className="text-3xl font-medium mb-8 text-blue-900">Voltage Measurements</h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
