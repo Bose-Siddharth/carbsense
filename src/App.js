@@ -13,8 +13,8 @@ function App() {
         <Route path="/sign-in" element={<Login />} />
         <Route path="/" exact element={<PrivateRoutes />}>
           <Route path="/" exact element={<Dashboard />} />
-          <Route path="device-list" element={<DeviceList />} />
-          <Route path="monitor" element={<Monitor />} />
+          <Route path="/device-list" element={<DeviceList />} />
+          <Route path="/monitor" element={<Monitor />} />
         </Route>
       </Routes>
     </BrowserRouter>

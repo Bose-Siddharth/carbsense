@@ -114,8 +114,7 @@ function index({ visible, handleClose }) {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={notify}
                 disabled={Object.values(form).some((item) => item === '') ? true : false}
-                style={{ transition: 'all 0.2s ease-in-out' }}
-              >
+                style={{ transition: 'all 0.2s ease-in-out' }}>
                 Add Device
               </button>
             </div>
@@ -125,8 +124,7 @@ function index({ visible, handleClose }) {
         <button
           type="button"
           className="absolute top-0 right-0 p-1 m-2 bg-white rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
-          onClick={handleClose}
-        >
+          onClick={handleClose}>
           <svg
             className="w-6 h-6 text-black"
             fill="none"
@@ -134,8 +132,7 @@ function index({ visible, handleClose }) {
             strokeLinejoin="round"
             strokeWidth="2"
             viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+            stroke="currentColor">
             <path d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
