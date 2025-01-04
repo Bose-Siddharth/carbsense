@@ -1,15 +1,13 @@
 import React from 'react';
+import './FilterBox.css';
 
 function FilterBox() {
   return (
-    <div className="bg-white w-72 h-32 flex items-center pr-10 rounded-lg">
-      <label htmlFor="operator" className="font-semibold fixed ml-5 mb-2 -mt-14">
+    <div className="filter-box">
+      <label htmlFor="operator" className="label">
         Operator
       </label>
-      <select
-        name="operator"
-        id="operator"
-        className="relative -mt-0 ml-10 w-full h-10 bg-white border-2 rounded-lg hover:border-blue-500">
+      <select name="operator" id="operator" className="select">
         <option value="all" defaultChecked>
           All
         </option>
