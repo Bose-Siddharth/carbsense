@@ -30,11 +30,11 @@ function index() {
   const categories = ['Well_8', 'Well_12', 'Well_21', 'Well_42', 'Well_50'];
   const seriesData = [
     {
-      name: 'Gas Production',
+      name: 'Gas Temperature',
       data: [120000, 60000, 40000, 20000, 10000]
     },
     {
-      name: 'Oil Production',
+      name: 'Gas Level (PPM)',
       data: [110000, 50000, 35000, 18000, 9000]
     }
   ];
@@ -54,69 +54,48 @@ function index() {
   return (
     <div className="p-4 sm:p-6 space-y-6">
       {/* Top Bar */}
-      <Topbar header="Monitor" />
-
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Left Section */}
-        <div className="flex flex-col gap-2 w-full lg:w-1/3">
+      <Topbar header="Monitor" notification={true} back={true} />
+      {/* layer 1 */}
+      <div className="sm:flex items-center gap-5 grid">
+        <div className="flex-1">
           <FilterBox />
-          <div className="space-y-2">
-            <InfoCard title="Flow Pressure" value={79.21} unit="K psi" />
-            <InfoCard title="Gas-Oil Ratio (GOR)" value={865.09} unit="mcf/bbl" />
-          </div>
-          <div className="space-y-2">
-            <OverviewCard
-              title="Oil BOEPD"
-              currentWeekValue={124181}
-              previousWeekValue={0}
-              percentageOfChange="100.00%"
-            />
-            <OverviewCard
-              title="Gas BOEPD"
-              currentWeekValue={231580}
-              previousWeekValue={0}
-              percentageOfChange="100.00%"
-            />
-          </div>
-          <div>
-            <TrendsCharts
-              title="Oil and Gas Production Trends"
-              subtitle="Last 4 Weeks"
-              categories={categories1}
-              seriesData={seriesData1}
-            />
-          </div>
         </div>
-
-        {/* Right Section */}
-        <div className="flex flex-col gap-2 w-full lg:w-2/3">
-          {/* Gauges */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
-            <GaugeView title="Well Uptime" value={26} unit="units" percentage={70} />
-            <GaugeView title="Gas Production Rate" value={46} unit="mcf/day" percentage={59} />
-            <GaugeView title="Well Uptime" value={72} unit="dgl/day" percentage={82} />
-            <GaugeView title="Production Efficiency" value={66} unit="%" percentage={66} />
-          </div>
-          {/* Charts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-            <RankingCharts
-              title="Top 5 Gas-Producing Wells"
-              categories={categories}
-              seriesData={seriesData}
-            />
-            <RankingCharts
-              title="Top 5 Gas-Producing Wells"
-              categories={categories}
-              seriesData={seriesData}
-            />
-          </div>
-          <div>
-            <ProductionCharts
-              title="Production by State"
-              data={productionData}
-              categories={productionCategories}
-            />
-          </div>
+        <div className="flex-1">
+          <InfoCard title="Gas Type" subTitle="Carbon Monoxide(CO)" />
+        </div>
+        <div className="flex-1">
+          <OverviewCard
+            title="Gas BOPED"
+            currentWeekValue={243687}
+            previousWeekValue={0}
+            percentageOfChange="100.00%"
+          />
+        </div>
+      </div>
+      {/* layer 2 */}
+      <div className='flex gap-5'>
+        {/* gauge section */}
+        <div className='flex-1 flex gap-5'>
+          <GaugeView
+            title='Temperature'
+            value={20}
+            unit='°C'
+            percentage={20}
+          />
+          <GaugeView
+            title='Gas Level(PPM)'
+            value={64}
+            unit='ppm'
+            percentage={64}
+          />
+        </div>
+        {/* graphs */}
+        <div className="flex-1">
+          <TrendsCharts
+          title='Gas Condition Overview'
+            categories={categories1}
+            seriesData={seriesData1}
+          />
         </div>
       </div>
     </div>

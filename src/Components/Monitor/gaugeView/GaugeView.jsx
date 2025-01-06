@@ -15,7 +15,7 @@ function GaugeView({ title, value, unit, percentage }) {
       plotOptions: {
         radialBar: {
           hollow: {
-            size: '70%' // Adjust hollow size
+            size: '65%' // Adjust hollow size
           },
           dataLabels: {
             show: true,

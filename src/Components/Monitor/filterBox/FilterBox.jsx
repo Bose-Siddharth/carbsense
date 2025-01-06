@@ -4,17 +4,17 @@ import './FilterBox.css';
 function FilterBox() {
   return (
     <div className="filter-box">
-      <label htmlFor="operator" className="label">
-        Operator
+      <label htmlFor="zone" className="label">
+        Zone
       </label>
-      <select name="operator" id="operator" className="select">
+      <select name="zone" id="zone" className="select">
         <option value="all" defaultChecked>
           All
         </option>
-        <option value="operator1">Operator 1</option>
-        <option value="operator2">Operator 2</option>
-        <option value="operator3">Operator 3</option>
-        <option value="operator4">Operator 4</option>
+        <option value="zone1">Zone 1</option>
+        <option value="zone2">Zone 2</option>
+        <option value="zone3">Zone 3</option>
+        <option value="zone4">Zone 4</option>
       </select>
     </div>
   );

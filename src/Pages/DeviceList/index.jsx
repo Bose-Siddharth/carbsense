@@ -7,7 +7,9 @@ function index() {
   return (
     <div>
       <div className="flex justify-between">
-        <Topbar header="Device List" notification="false" back="true" />
+        <div className="flex-1 mr-5">
+          <Topbar header="Device List" notification="false" back="true" />
+        </div>
         <AddDeviceModal>
           <ModalForm />
         </AddDeviceModal>
