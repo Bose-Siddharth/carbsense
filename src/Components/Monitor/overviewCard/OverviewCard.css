@@ -1,100 +1,43 @@
-/* General styles for OverviewCard */
 .overview-card {
-    background-color: white;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  /* Flex container for icon and percentage */
-  .overview-card .flex {
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Percentage change text styling */
-  .percentage-change {
-    color: #16a34a; /* Green color */
-    font-size: 1rem;
-    font-weight: bold;
-    margin-left: 8px;
-  }
-  
-  /* Title text style */
-  .overview-card .text-gray-500 {
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-  
-  /* Container for values */
-  .values-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-  }
-  
-  /* Individual value section (current/previous week) */
-  .value-item {
-    text-align: center;
-    flex-grow: 1;
-  }
-  
-  /* Value styling */
-  .value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #111;
-  }
-  
-  /* Label under values */
-  .label {
-    font-size: 0.75rem;
-    color: #6b7280;
-    margin-top: 4px;
-  }
-  
-  /* Separator between value items */
-  .separator {
-    border-left: 2px solid #e5e7eb;
-    height: 50px;
-    margin: 0 1rem;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 640px) {
-    .overview-card {
-      max-width: 100%;
-      padding: 0.75rem;
-    }
-  
-    .percentage-change {
-      font-size: 0.875rem; /* Adjust percentage font size for small screens */
-    }
-  
-    .value {
-      font-size: 1.25rem; /* Make values slightly smaller on mobile */
-    }
-  
-    .label {
-      font-size: 0.75rem;
-    }
-  
-    .separator {
-      display: none; /* Hide separator on small screens */
-    }
-  
-    .values-container {
-      flex-direction: column; /* Stack the values vertically */
-      align-items: center;
-    }
-  
-    .value-item {
-      margin-bottom: 1rem;
-    }
-  }  
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sensor-id {
+  font-weight: bold;
+}
+
+.sensor-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-text {
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.values-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.value-item {
+  text-align: center;
+}
+
+.separator {
+  border-left: 1px solid #ccc;
+  height: 30px;
+  margin: 0 10px;
+}

@@ -1,54 +1,66 @@
 .gauge-view {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 7px;
-  }
-  
-  #chart {
-    width: 100%;
-    max-width: 250px;
-    padding: 0;
-  }
-  
-  .gauge-title {
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    color: #333;
-  }
-  
-  /* Responsiveness */
-  @media (max-width: 768px) {
-    .gauge-view {
-      padding: 10px;
-    }
-  
-    .gauge-title {
-      font-size: 14px;
-    }
-  
-    #chart {
-      max-width: 200px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .gauge-view {
-      padding: 8px;
-    }
-  
-    .gauge-title {
-      font-size: 12px;
-    }
-  
-    #chart {
-      max-width: 180px;
-    }
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.gauge-view:hover {
+  transform: scale(1.05);
+}
+
+.gauge-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.tooltip-icon {
+  position: relative;
+  display: inline-flex;
+  margin-left: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.tooltip-icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 5px;
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 180px;
+  transition: opacity 0.3s ease;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}

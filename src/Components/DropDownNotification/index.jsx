@@ -4,7 +4,7 @@ import './DropDownNotification.css';
 function index() {
   return (
     <>
-      <div className="flex flex-col dropDownProfile">
+      <div className="flex flex-col dropDownProfile z-10">
         <ul className="flex flex-col gap-4">
           <li className="bg-blue-400 h-20 rounded-lg p-3">1</li>
           <li className="bg-blue-400 h-20 rounded-lg p-3">2</li>

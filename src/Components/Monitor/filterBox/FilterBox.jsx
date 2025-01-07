@@ -4,17 +4,13 @@ import './FilterBox.css';
 function FilterBox() {
   return (
     <div className="filter-box">
-      <label htmlFor="operator" className="label">
-        Operator
+      <label htmlFor="view_option" className="label">
+        View Options
       </label>
-      <select name="operator" id="operator" className="select">
-        <option value="all" defaultChecked>
-          All
-        </option>
-        <option value="operator1">Operator 1</option>
-        <option value="operator2">Operator 2</option>
-        <option value="operator3">Operator 3</option>
-        <option value="operator4">Operator 4</option>
+      <select name="view_option" id="view_option" className="select">
+        <option value="view_option1">Live Sensor Data Monitor</option>
+        <option value="view_option2">Generate Data Report</option>
+        <option value="view_option3">Previous Reports</option>
       </select>
     </div>
   );

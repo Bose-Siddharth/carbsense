@@ -64,6 +64,8 @@ function Index() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [rowsPerPage, setRowsPerPage] = useState(5); // Default rows to 5
   const [currentPage, setCurrentPage] = useState(1);
+  const [editData, setEditData] = useState([]);
+  const [editClick, setEditClick] = useState(false);
 
   // Filter logic for search and status
   const filteredData = data.filter((item) => {
@@ -163,7 +165,15 @@ function Index() {
                   </td>
                   <td className="p-4 text-center">
                     <div className="flex justify-center gap-4">
-                      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">Edit</button>
+                      <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                        onClick={() => {
+                          console.log(item);
+                          setEditData(item);
+                          setEditClick(true);
+                        }}>
+                        Edit
+                      </button>
                       <button className="bg-gray-500 text-white px-4 py-2 rounded-lg">
                         View More
                       </button>
@@ -215,6 +225,16 @@ function Index() {
           <option value="15">Show 15</option>
         </select>
       </div>
+
+      {editClick && (
+        <ModalForm
+          visible={editClick}
+          editData={editData}
+          handleClose={() => {
+            setEditClick(false);
+          }}
+        />
+      )}
     </div>
   );
 }

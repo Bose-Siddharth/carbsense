@@ -1,39 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaAngleDoubleUp } from 'react-icons/fa';
+import { FaBatteryFull, FaExclamationCircle } from 'react-icons/fa'; // Icons for status
 import './OverviewCard.css';
 
-function OverviewCard({ title, currentWeekValue, previousWeekValue, percentageOfChange }) {
+function OverviewCard({ sensorId, sensorStatus, upTime, efficiency }) {
   return (
     <div className="overview-card">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          <FaAngleDoubleUp className="text-green-500" size={20} />
-          <span className="percentage-change">{percentageOfChange}</span>
+      <div className="header flex justify-between items-center">
+        <div className="sensor-id">
+          <strong>Sensor ID: </strong>
+          <span>{sensorId}</span>
         </div>
-        <div className="text-gray-500 text-sm">{title}</div>
+        <div className="sensor-status flex items-center">
+          {sensorStatus === 'Active' ? (
+            <FaBatteryFull className="text-green-500" size={20} />
+          ) : (
+            <FaExclamationCircle className="text-red-500" size={20} />
+          )}
+          <span className="status-text">{sensorStatus}</span>
+        </div>
       </div>
 
       <div className="values-container">
         <div className="value-item">
-          <span className="value">{currentWeekValue.toLocaleString()}</span>
-          <span className="label">Current Week</span>
+          <span className="value">{upTime}</span>
+          <span className="label">Up Time</span>
         </div>
         <div className="separator"></div>
         <div className="value-item">
-          <span className="value">{previousWeekValue.toLocaleString()}</span>
-          <span className="label">Previous Week</span>
+          <span className="value">{efficiency}%</span>
+          <span className="label">Efficiency</span>
         </div>
       </div>
     </div>
   );
 }
 
-export default OverviewCard;
-
 OverviewCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  currentWeekValue: PropTypes.number.isRequired,
-  previousWeekValue: PropTypes.number.isRequired,
-  percentageOfChange: PropTypes.string.isRequired
+  sensorId: PropTypes.string.isRequired,
+  sensorStatus: PropTypes.string.isRequired,
+  upTime: PropTypes.string.isRequired,
+  efficiency: PropTypes.number.isRequired
 };
+
+export default OverviewCard;
