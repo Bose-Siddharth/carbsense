@@ -1,86 +1,95 @@
-// LoginForm.jsx
-import React, { useState } from 'react';
-// import Topbar from '../../Components/Topbar';
+import React, { useState, useEffect } from 'react';
+import { MdOutlineMail } from 'react-icons/md';
+import { CiLock } from "react-icons/ci";
 
-const LoginForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const images = ['/image_one.png', '/image_two.png', '/image_three.png'];
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log('Logging in with:', { username, password });
-  };
+const LoginPage = () => {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-400 to-blue-600">
-      {/* Topbar */}
-      {/* <Topbar header="Login Page" notification="false" back="true" /> */}
+    <div className="flex flex-col md:flex-row h-screen w-screen">
+      {/* Left Side Slider */}
+      <div className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden flex justify-center items-center">
+        {images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt={`slide-${index}`}
+            className={`absolute w-[90%] h-[90vh] object-cover transition-opacity duration-1000  rounded-[3%] ${
+              index === currentImage ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
 
-      {/* Centered Login Form */}
-      <div className="flex flex-1 items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-          <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
-          <form onSubmit={handleLogin} className="space-y-4">
-            {/* Username Input */}
+        {/* Welcome Back and Description */}
+        <div className="absolute bottom-20 pl-6 text-white text-center">
+          <h2 className="text-5xl font-bold">
+            Welcome Back to SAIL Dashboard
+          </h2>
+          <p className="text-lg mt-2 ">
+            Access your personalized dashboard to manage tasks, monitor progress, and stay connected with SAIL operations.
+          </p>
+        </div>
+      </div>
+
+      {/* Right Side Form */}
+      <div className="flex items-center justify-center w-full md:w-1/2 bg-white p-10">
+        <div className="w-[65%] outline-none">
+          <div className="flex justify-center mb-6">
+            <img src="/sail_logo.png" alt="SAIL Logo" className="h-[15rem]" />
+          </div>
+          <h2 className="text-[2.5rem] font-[600] text-[#053375] text-center mb-4">Sign in Now</h2>
+          <form>
             <div className="relative">
+              <MdOutlineMail className="absolute text-[2rem] text-[#626262] top-[15%] left-2" />
               <input
-                type="text"
-                placeholder="Username"
-                className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                placeholder="Email"
+                className="w-full p-3 border  mb-4 outline-none border-[#B0B0B0] rounded-xl pl-12"
                 required
               />
-              <div className="absolute right-3 top-3 text-gray-500">
-                <i className="fas fa-user"></i>
-              </div>
             </div>
-
-            {/* Password Input */}
             <div className="relative">
+              <CiLock className="absolute text-[2rem] text-[#626262] top-[15%] left-2"/>
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 border  mb-4 outline-none border-[#B0B0B0] rounded-xl pl-10"
                 required
               />
-              <div className="absolute right-3 top-3 text-gray-500">
-                <i className="fas fa-lock"></i>
-              </div>
             </div>
-
-            {/* Remember Me & Forgot Password */}
-            <div className="flex justify-between items-center text-sm">
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" className="w-4 h-4 text-blue-600" />
-                <span>Remember me</span>
-              </label>
-              <a href="#" className="text-blue-500 hover:underline">
-                Forgot Password?
+            <div className="flex justify-end items-center text-sm mb-4">
+              <a href="#" className="text-blue-600">
+                Forgot password?
               </a>
             </div>
 
-            {/* Login Button */}
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300">
-              Login
+            <button type="submit" className="w-full bg-[#053375] text-white py-3 rounded-xl mb-4">
+              Log in
             </button>
-
-            {/* Register Link */}
-            <p className="text-center text-sm mt-4">
-              {"Don't have an account?"}{' '}
-              <a href="#" className="text-blue-500 hover:underline">
-                Register
-              </a>
-            </p>
           </form>
+
+          <p className="text-center text-sm mb-4 text-[#626262] text-[1.3rem]">
+            Have no account yet?
+          </p>
+          <div className="text-center">
+            <a href="#" className="inline-block px-4 py-2 border border-blue-600 text-blue-600 w-[100%] rounded-xl">
+              Register Now
+            </a>
+          </div>
+
         </div>
       </div>
     </div>
   );
 };
 
-export default LoginForm;
+export default LoginPage;
