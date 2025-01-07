@@ -23,7 +23,7 @@ function TopBar({ header, notification = false, back = false }) {
   }, [openNotification]);
 
   return (
-    <div className="flex justify-between items-center border-b border-black px-4 py-2">
+    <div className="flex flex-1 justify-between items-center border-b border-black px-4 py-2 mr-5">
       {/* Header */}
       <h1 className="font-semibold text-4xl whitespace-pre">{header}</h1>
 
