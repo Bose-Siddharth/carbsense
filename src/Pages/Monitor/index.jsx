@@ -67,12 +67,12 @@ function index() {
 
   const initialSeriesData = [
     {
-      name: 'Series 1',
-      data: [10, 15, 25, 40, 35]
+      name: 'Gas Temperature',
+      data: Array.from({ length: categoriesTime.length }, () => Math.floor(Math.random() * 101))
     },
     {
-      name: 'Series 2',
-      data: [5, 20, 30, 50, 45]
+      name: 'Gas Level (PPM)',
+      data: Array.from({ length: categoriesTime.length }, () => Math.floor(Math.random() * 301))
     }
   ];
 
