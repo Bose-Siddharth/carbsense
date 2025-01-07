@@ -227,10 +227,13 @@ function Index() {
       </div>
 
       {editClick && (
-          <ModalForm visible={editClick} editData={editData} handleClose={()=>{
-            setEditClick(false)
-          }}/>
-       
+        <ModalForm
+          visible={editClick}
+          editData={editData}
+          handleClose={() => {
+            setEditClick(false);
+          }}
+        />
       )}
     </div>
   );

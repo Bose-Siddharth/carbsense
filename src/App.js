@@ -5,6 +5,7 @@ import Monitor from './Pages/Monitor';
 import DeviceList from './Pages/DeviceList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PrivateRoutes from './Utils/PrivateRoutes';
+import './App.css';
 
 function App() {
   return (
