@@ -3,15 +3,7 @@ import PropTypes from 'prop-types'; // Import PropTypes
 
 export const MachineNumber = ({ title, totalNumber, icon, description }) => {
   return (
-    //   <div className="lg:w-2/6 w-full lg:h-full h-full bg-[#fff] rounded-lg p-5">
-    //     <div>
-    //       <h2>{title}</h2>
-    //     </div>
-    //     <div>
-    //       <p>{totalNumber}</p>
-    //     </div>
-    //   </div>
-    <div className="w-full justify-between lg:w-2/6 bg-white rounded-lg py-9 px-5 shadow-md">
+    <div className="w-full justify-between lg:w-2/6 bg-white rounded-lg py-9 px-5 shadow-md poppins">
       <div>
         <h2 className="text-[1.5rem] font-semibold">{title}</h2>
       </div>
@@ -26,7 +18,7 @@ export const MachineNumber = ({ title, totalNumber, icon, description }) => {
                 ? 'text-yellow-600'
                 : title === 'Inactive Machines'
                 ? 'text-red-600'
-                : 'text-gray-600'
+                : 'text-[#052A75]'
             }`}>
             {description}
           </p>
