@@ -1,10 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Datajson from '../../Utils/Jsons/Dashboard/DashboardCard.json';
+import './heathTable.css';
 
-export const HealthTable = ({ name = '' }) => {
-  const { data } = Datajson;
-  console.log(name);
+import Lottie from 'react-lottie';
+import warningLottie from '../../Lottie/warningLottie.json';
+import activeLottie from '../../Lottie/activeLottie.json';
+import dangerLottie from '../../Lottie/dangerLottie.json';
+
+const toSentenceCase = (str) => {
+  if (!str) return '';
+  const lowerCased = str.replace(/([^\w\s])/g, '').toLowerCase();
+  return lowerCased.charAt(0).toUpperCase() + lowerCased.slice(1);
+};
+
+export const HealthTable = ({ name }) => {
+  const navigate = useNavigate();
+  const { data = [] } = Datajson;
+
+  const handleClick = () => {
+    navigate('/monitor');
+  };
 
   const filteredData = data.filter((item) => {
     if (name === 'Active Machines Health Reports' && item.status === 'Active') {
@@ -17,22 +34,48 @@ export const HealthTable = ({ name = '' }) => {
     return false;
   });
 
-  // Extract table headings from the keys of the first object in the filtered data
   const headings = filteredData.length > 0 ? Object.keys(filteredData[0]) : [];
 
+  const warningLottieOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: warningLottie,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  };
+
+  const activeLottieOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: activeLottie,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  };
+
+  const dangerLottieOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: dangerLottie,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  };
+
   return (
-    <div className="p-4">
+    <div className="p-4 poppins">
       <h1 className="text-lg font-bold mb-4">{name}</h1>
       <div className="w-full border border-gray-300 rounded-lg overflow-hidden">
         {/* Table Head */}
         {filteredData.length > 0 && (
-          <div className="bg-gray-200 text-gray-700 font-semibold flex w-full">
+          <div className="bg-[#044A72] text-[#fff] font-semibold flex w-full">
+            <div className="p-3 w-16 text-center border-b border-gray-300"> </div>
             {headings.map((heading) => (
               <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
-                {heading}
+                {toSentenceCase(heading)}
               </div>
             ))}
-            {/* Add a column for the button */}
             <div className="p-3 w-32 text-center border-b border-gray-300">Actions</div>
           </div>
         )}
@@ -46,15 +89,25 @@ export const HealthTable = ({ name = '' }) => {
                 className={`flex w-full ${
                   index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                 } text-gray-800`}>
+                <div className="p-3 w-16 text-center border-b border-gray-300 flex items-center justify-center">
+                  {name === 'Active Machines Health Reports' ? (
+                    <Lottie options={activeLottieOptions} height={40} width={40} />
+                  ) : name === 'Warning Machines Health Reports' ? (
+                    <Lottie options={warningLottieOptions} height={40} width={40} />
+                  ) : (
+                    <Lottie options={dangerLottieOptions} height={40} width={40} />
+                  )}
+                </div>
                 {headings.map((heading) => (
                   <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
                     {item[heading]}
                   </div>
                 ))}
-                {/* Add the View button */}
-                <div className="p-3 w-32 text-center border-b border-gray-300">
-                  <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    View
+                <div className="p-3 text-center border-b border-gray-300">
+                  <button
+                    className="px-4 py-2 bg-[#246d97] text-white rounded-lg hover:bg-[#15234b]"
+                    onClick={handleClick}>
+                    Monitor View
                   </button>
                 </div>
               </div>
@@ -68,7 +121,6 @@ export const HealthTable = ({ name = '' }) => {
   );
 };
 
-// Add prop types validation
 HealthTable.propTypes = {
   name: PropTypes.string.isRequired
 };
