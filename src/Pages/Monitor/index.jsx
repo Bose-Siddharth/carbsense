@@ -1,123 +1,140 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Topbar from '../../Components/Topbar';
 import GaugeView from '../../Components/Monitor/gaugeView/GaugeView';
 import ProductionCharts from '../../Components/Monitor/productionCharts/ProductionCharts';
 import OverviewCard from '../../Components/Monitor/overviewCard/OverviewCard';
 import InfoCard from '../../Components/Monitor/InfoCard';
 import FilterBox from '../../Components/Monitor/filterBox/FilterBox';
-import RankingCharts from '../../Components/Monitor/rankingCharts/RankingCharts';
 import TrendsCharts from '../../Components/Monitor/trendsCharts/TrendsCharts';
 
-// Helper function to generate dummy data
-const generateDummyData = (numStates, numWeeks) => {
-  const categories = Array.from({ length: numWeeks }, (_, i) => `Week ${i + 1}`);
-  const data = Array.from({ length: numStates }, () =>
-    Array.from({ length: numWeeks }, () => Math.floor(Math.random() * 100))
-  );
+function generateDummyData(rows = 10, columns = 8) {
+  const categories = Array.from({ length: columns }, (_, i) => `Day ${i + 1}`);
+  const data = [];
+  for (let i = 0; i < rows; i++) {
+    const tempData = Array.from({ length: columns }, () => Math.floor(Math.random() * 101));
+    data.push({ name: `Interval ${i + 1} Temperature`, data: tempData });
+    const ppmData = Array.from({ length: columns }, () => Math.floor(Math.random() * 201));
+    data.push({ name: `Interval ${i + 1} PPM`, data: ppmData });
+  }
+  return { categories, data };
+}
 
+function generateDummyGaugeData() {
+  const gasTemperature = Math.floor(Math.random() * 101);
+  const gasLevel = Math.floor(Math.random() * 301);
+  const gasTemperaturePercentage = Math.min((gasTemperature / 100) * 100, 100);
+  const gasLevelPercentage = Math.min((gasLevel / 300) * 100, 100);
   return {
-    categories,
-    data
+    gasTemperature: {
+      value: gasTemperature,
+      percentage: gasTemperaturePercentage
+    },
+    gasLevel: {
+      value: gasLevel,
+      percentage: gasLevelPercentage
+    }
   };
-};
+}
 
 function index() {
-  // Generate dummy data for ProductionCharts
-  const { categories: productionCategories, data: productionData } = generateDummyData(8, 12); // 8 states, 12 weeks
+  const { data, categories } = generateDummyData(5, 8);
+  const [dataGauge, setDataGauge] = useState(generateDummyGaugeData());
+  const [latestReading, setLatestReading] = useState(null);
+  const [categoriesTime, setCategoriesTime] = useState([...categories]);
 
-  const categories = ['Well_8', 'Well_12', 'Well_21', 'Well_42', 'Well_50'];
-  const seriesData = [
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newData = generateDummyGaugeData();
+      console.log('Generated Dummy Data:', newData);
+      setDataGauge({
+        gasTemperature: {
+          value: newData.gasTemperature.value,
+          percentage: newData.gasTemperature.percentage
+        },
+        gasLevel: {
+          value: newData.gasLevel.value,
+          percentage: newData.gasLevel.percentage
+        }
+      });
+      setLatestReading([newData.gasTemperature.value, newData.gasLevel.value]);
+      setCategoriesTime((prevCategories) => [...prevCategories, new Date().toLocaleTimeString()]);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const initialSeriesData = [
     {
-      name: 'Gas Production',
-      data: [120000, 60000, 40000, 20000, 10000]
+      name: 'Series 1',
+      data: [10, 15, 25, 40, 35]
     },
     {
-      name: 'Oil Production',
-      data: [110000, 50000, 35000, 18000, 9000]
+      name: 'Series 2',
+      data: [5, 20, 30, 50, 45]
     }
   ];
 
-  const categories1 = ['Week 51 2024', 'Week 52 2024', 'Week 01 2025'];
-  const seriesData1 = [
-    {
-      name: 'Oil Production',
-      data: [108340, 117370, 60680]
-    },
-    {
-      name: 'Gas Production',
-      data: [329370, 361430, 192310]
-    }
+  const thresholds = [
+    { value: 250, color: '#FF0000' },
+    { value: 150, color: '#FFA500' },
+    { value: 0, color: '#1E90FF' }
   ];
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      {/* Top Bar */}
-      <Topbar header="Monitor" />
-
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Left Section */}
-        <div className="flex flex-col gap-2 w-full lg:w-1/3">
+      <Topbar header="Monitor" notification={true} back={true} />
+      <div className="sm:flex items-center gap-5 grid">
+        <div className="flex-1">
           <FilterBox />
-          <div className="space-y-2">
-            <InfoCard title="Flow Pressure" value={79.21} unit="K psi" />
-            <InfoCard title="Gas-Oil Ratio (GOR)" value={865.09} unit="mcf/bbl" />
-          </div>
-          <div className="space-y-2">
-            <OverviewCard
-              title="Oil BOEPD"
-              currentWeekValue={124181}
-              previousWeekValue={0}
-              percentageOfChange="100.00%"
-            />
-            <OverviewCard
-              title="Gas BOEPD"
-              currentWeekValue={231580}
-              previousWeekValue={0}
-              percentageOfChange="100.00%"
-            />
-          </div>
-          <div>
-            <TrendsCharts
-              title="Oil and Gas Production Trends"
-              subtitle="Last 4 Weeks"
-              categories={categories1}
-              seriesData={seriesData1}
-            />
-          </div>
         </div>
-
-        {/* Right Section */}
-        <div className="flex flex-col gap-2 w-full lg:w-2/3">
-          {/* Gauges */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
-            <GaugeView title="Well Uptime" value={26} unit="units" percentage={70} />
-            <GaugeView title="Gas Production Rate" value={46} unit="mcf/day" percentage={59} />
-            <GaugeView title="Well Uptime" value={72} unit="dgl/day" percentage={82} />
-            <GaugeView title="Production Efficiency" value={66} unit="%" percentage={66} />
-          </div>
-          {/* Charts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-            <RankingCharts
-              title="Top 5 Gas-Producing Wells"
-              categories={categories}
-              seriesData={seriesData}
-            />
-            <RankingCharts
-              title="Top 5 Gas-Producing Wells"
-              categories={categories}
-              seriesData={seriesData}
-            />
-          </div>
-          <div>
-            <ProductionCharts
-              title="Production by State"
-              data={productionData}
-              categories={productionCategories}
-            />
-          </div>
+        <div className="flex-1">
+          <InfoCard title="Gas Type" subTitle="Carbon Monoxide(CO)" />
         </div>
+        <div className="flex-1">
+          <OverviewCard
+            sensorId="SENSOR12345"
+            sensorStatus="Active"
+            upTime="72 hours"
+            efficiency={95}
+          />
+        </div>
+      </div>
+      <div className="flex gap-5">
+        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
+          <GaugeView
+            title="Gas Temperature"
+            value={dataGauge.gasTemperature.value}
+            unit="°C"
+            percentage={dataGauge.gasTemperature.percentage}
+            thresholds={{ low: 30, high: 60 }}
+          />
+          <GaugeView
+            title="Gas Level (PPM)"
+            value={dataGauge.gasLevel.value}
+            unit="ppm"
+            percentage={dataGauge.gasLevel.percentage}
+            thresholds={{ low: 100, high: 200 }}
+          />
+        </div>
+        <div className="flex-1">
+          <TrendsCharts
+            title="Dynamic Trends Chart"
+            subtitle="Values updated dynamically"
+            categories={categoriesTime}
+            initialSeriesData={initialSeriesData}
+            latestReading={latestReading}
+            thresholds={thresholds}
+          />
+        </div>
+      </div>
+      <div>
+        <ProductionCharts
+          title="Gas Temperature and PPM Trends"
+          data={data}
+          categories={categories}
+        />
       </div>
     </div>
   );
