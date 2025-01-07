@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
-function index({ visible, handleClose }) {
+function index({ visible, handleClose, editData = {} }) {
   if (!visible) return null;
 
+  console.log(editData);
+
   const initialForm = {
-    deviceId: '',
+    deviceId: editData.id || '',
     tankId: '',
     site: '',
     tankDepth: '',
@@ -17,6 +19,18 @@ function index({ visible, handleClose }) {
   const notify = () => toast.success('Device added successfully!');
 
   const [form, setForm] = React.useState(initialForm);
+
+  useEffect(() => {
+    setForm({
+      deviceId: editData.id || ''
+      // tankId: editData.tankId || '',
+      // site: editData.site || '',
+      // tankDepth: editData.tankDepth || '',
+      // tankCapacity: editData.tankCapacity || '',
+      // liquidType: editData.liquidType || '',
+      // currentLevel: editData.currentLevel || '',
+    });
+  }, [editData]);
 
   // eslint-disable-next-line no-unused-vars
   const handleSubmit = (e) => {
@@ -46,6 +60,7 @@ function index({ visible, handleClose }) {
                   type="text"
                   className="border-2 border-gray-800 rounded-md p-2 focus:outline-none focus:border-blue-500"
                   onChange={handleChange}
+                  value={form.deviceId}
                   name="deviceId"
                 />
               </div>
