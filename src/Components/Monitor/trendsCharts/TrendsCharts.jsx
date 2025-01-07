@@ -1,25 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import PropTypes from 'prop-types';
-import './TrendsCharts.css'; // Import the CSS file
+import './TrendsCharts.css';
 
-function TrendsCharts({ title, subtitle, categories, seriesData }) {
+function TrendsCharts({
+  title,
+  subtitle,
+  categories,
+  initialSeriesData,
+  latestReading,
+  thresholds
+}) {
+  const [seriesData, setSeriesData] = useState(initialSeriesData);
+
+  useEffect(() => {
+    if (latestReading) {
+      // Append the latest reading to the last series and keep only the last 10 data points
+      setSeriesData((prevSeries) =>
+        prevSeries.map((series, index) => ({
+          ...series,
+          data: [...series.data, latestReading[index]].slice(-10) // Keep only the last 10 data points
+        }))
+      );
+    }
+  }, [latestReading]);
+
+  const getDynamicColors = (data) => {
+    return data.map((series) => {
+      const thresholdColor = thresholds.find((threshold) =>
+        series.data.some((value) => value >= threshold.value)
+      );
+      return thresholdColor ? thresholdColor.color : '#1E90FF'; // Default color
+    });
+  };
+
+  const [dynamicColors, setDynamicColors] = useState(getDynamicColors(seriesData));
+
+  useEffect(() => {
+    setDynamicColors(getDynamicColors(seriesData));
+  }, [seriesData]);
+
   const options = {
     chart: {
       height: '100%',
       type: 'area',
       toolbar: {
-        show: false // Hide chart toolbar
+        show: false
       }
     },
     dataLabels: {
-      enabled: false // Disable data labels for a cleaner chart
+      enabled: false
     },
     stroke: {
-      curve: 'smooth' // Smooth lines for area chart
+      curve: 'smooth'
     },
     xaxis: {
-      categories: categories, // Dynamic categories (e.g., weeks)
+      categories: categories.slice(-10), // Show only the last 10 categories
       labels: {
         style: {
           fontSize: '12px'
@@ -32,22 +68,22 @@ function TrendsCharts({ title, subtitle, categories, seriesData }) {
           fontSize: '12px'
         },
         formatter: function (value) {
-          return value.toLocaleString(); // Add commas for better readability
+          return value.toLocaleString();
         }
       }
     },
     tooltip: {
       x: {
-        format: 'MMM dd, yyyy' // Format tooltip x-axis labels
+        format: 'MMM dd, yyyy'
       },
       y: {
         formatter: function (value) {
-          return value.toLocaleString(); // Add commas to tooltip values
+          return value.toLocaleString();
         }
       }
     },
     fill: {
-      type: 'gradient', // Gradient fill for areas
+      type: 'gradient',
       gradient: {
         shadeIntensity: 1,
         inverseColors: false,
@@ -56,9 +92,9 @@ function TrendsCharts({ title, subtitle, categories, seriesData }) {
         stops: [0, 90, 100]
       }
     },
-    colors: ['#1E90FF', '#FFA500'], // Custom colors for series
+    colors: dynamicColors,
     title: {
-      text: title, // Chart title
+      text: title,
       align: 'left',
       margin: 10,
       style: {
@@ -67,7 +103,7 @@ function TrendsCharts({ title, subtitle, categories, seriesData }) {
       }
     },
     subtitle: {
-      text: subtitle, // Subtitle (e.g., Last 4 Weeks)
+      text: subtitle,
       align: 'left',
       margin: 10,
       style: {
@@ -89,13 +125,20 @@ function TrendsCharts({ title, subtitle, categories, seriesData }) {
 }
 
 TrendsCharts.propTypes = {
-  title: PropTypes.string.isRequired, // Chart title
-  subtitle: PropTypes.string, // Chart subtitle
-  categories: PropTypes.arrayOf(PropTypes.string).isRequired, // Categories (x-axis labels)
-  seriesData: PropTypes.arrayOf(
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
+  categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+  initialSeriesData: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string.isRequired, // Series name
-      data: PropTypes.arrayOf(PropTypes.number).isRequired // Data points
+      name: PropTypes.string.isRequired,
+      data: PropTypes.arrayOf(PropTypes.number).isRequired
+    })
+  ).isRequired,
+  latestReading: PropTypes.arrayOf(PropTypes.number),
+  thresholds: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired
     })
   ).isRequired
 };
