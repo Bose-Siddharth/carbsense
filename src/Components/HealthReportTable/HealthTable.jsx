@@ -44,6 +44,9 @@ export const HealthTable = ({ name, newdata }) => {
 
   const headings = filteredData.length > 0 ? Object.keys(filteredData[0]) : [];
 
+  console.log(headings);
+  console.log(filteredData);
+
   const warningLottieOptions = {
     loop: true,
     autoplay: true,
@@ -99,16 +102,20 @@ export const HealthTable = ({ name, newdata }) => {
                     {headings.map((heading) => (
                       <td key={heading} className="p-3 text-center border-b border-gray-300">
                         <div className="">
-                          {item[heading] === 'Active' && (
+                          {heading.toLowerCase() === 'status' && item[heading] === 'Active' && (
                             <Lottie options={activeLottieOptions} height={40} width={40} />
                           )}
-                          {item[heading] === 'Warning' && (
+                          {heading.toLowerCase() === 'status' && item[heading] === 'Warning' && (
                             <Lottie options={warningLottieOptions} height={40} width={40} />
                           )}
-                          {item[heading] === 'Inactive' && (
+                          {heading.toLowerCase() === 'status' && item[heading] === 'Inactive' && (
                             <Lottie options={dangerLottieOptions} height={40} width={40} />
                           )}
-                          <span>{item[heading]}</span>
+                          <span>
+                            {typeof item[heading] === 'string' || typeof item[heading] === 'number'
+                              ? item[heading]
+                              : JSON.stringify(item[heading])}{' '}
+                          </span>
                         </div>
                       </td>
                     ))}
