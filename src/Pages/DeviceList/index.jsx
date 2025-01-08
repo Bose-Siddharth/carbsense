@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ModalForm from '../../Components/ModalForm';
 import AddDeviceModal from '../../Utils/AddDeviceModal';
 import Topbar from '../../Components/Topbar';
+import { useNavigate } from 'react-router-dom';
 
 // Sample data
 const data = [
@@ -66,6 +67,7 @@ function Index() {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState([]);
   const [editClick, setEditClick] = useState(false);
+  const navigate = useNavigate();
 
   // Filter logic for search and status
   const filteredData = data.filter((item) => {
@@ -174,7 +176,11 @@ function Index() {
                         }}>
                         Edit
                       </button>
-                      <button className="bg-gray-500 text-white px-4 py-2 rounded-lg">
+                      <button
+                        className="bg-gray-500 text-white px-4 py-2 rounded-lg"
+                        onClick={() => {
+                          navigate(`/monitor/${item.id}`);
+                        }}>
                         View More
                       </button>
                     </div>

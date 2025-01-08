@@ -15,7 +15,7 @@ function App() {
         <Route path="/" exact element={<PrivateRoutes />}>
           <Route path="/" exact element={<Dashboard />} />
           <Route path="/device-list" element={<DeviceList />} />
-          <Route path="/monitor" element={<Monitor />} />
+          <Route path="/monitor/:id" element={<Monitor />} />
         </Route>
       </Routes>
     </BrowserRouter>

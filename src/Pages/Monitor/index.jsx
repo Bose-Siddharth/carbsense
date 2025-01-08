@@ -8,6 +8,7 @@ import OverviewCard from '../../Components/Monitor/overviewCard/OverviewCard';
 import InfoCard from '../../Components/Monitor/InfoCard';
 import FilterBox from '../../Components/Monitor/filterBox/FilterBox';
 import TrendsCharts from '../../Components/Monitor/trendsCharts/TrendsCharts';
+import { useParams } from 'react-router-dom';
 
 function generateDummyData(rows = 10, columns = 8) {
   const categories = Array.from({ length: columns }, (_, i) => `Day ${i + 1}`);
@@ -43,10 +44,13 @@ function index() {
   const [dataGauge, setDataGauge] = useState(generateDummyGaugeData());
   const [latestReading, setLatestReading] = useState(null);
   const [categoriesTime, setCategoriesTime] = useState([...categories]);
+  const { id } = useParams();
+
 
   useEffect(() => {
     const interval = setInterval(() => {
       const newData = generateDummyGaugeData();
+      // console.log(id)
       console.log('Generated Dummy Data:', newData);
       setDataGauge({
         gasTemperature: {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdOutlineMail } from 'react-icons/md';
-import { CiLock } from "react-icons/ci";
+import { CiLock } from 'react-icons/ci';
 
 const images = ['/image_one.png', '/image_two.png', '/image_three.png'];
 
@@ -31,11 +31,10 @@ const LoginPage = () => {
 
         {/* Welcome Back and Description */}
         <div className="absolute bottom-20 pl-6 text-white text-center">
-          <h2 className="text-5xl font-bold">
-            Welcome Back to SAIL Dashboard
-          </h2>
+          <h2 className="text-5xl font-bold">Welcome Back to SAIL Dashboard</h2>
           <p className="text-lg mt-2 ">
-            Access your personalized dashboard to manage tasks, monitor progress, and stay connected with SAIL operations.
+            Access your personalized dashboard to manage tasks, monitor progress, and stay connected
+            with SAIL operations.
           </p>
         </div>
       </div>
@@ -58,7 +57,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="relative">
-              <CiLock className="absolute text-[2rem] text-[#626262] top-[15%] left-2"/>
+              <CiLock className="absolute text-[2rem] text-[#626262] top-[15%] left-2" />
               <input
                 type="password"
                 placeholder="Password"
@@ -81,11 +80,12 @@ const LoginPage = () => {
             Have no account yet?
           </p>
           <div className="text-center">
-            <a href="#" className="inline-block px-4 py-2 border border-blue-600 text-blue-600 w-[100%] rounded-xl">
+            <a
+              href="#"
+              className="inline-block px-4 py-2 border border-blue-600 text-blue-600 w-[100%] rounded-xl">
               Register Now
             </a>
           </div>
-
         </div>
       </div>
     </div>
