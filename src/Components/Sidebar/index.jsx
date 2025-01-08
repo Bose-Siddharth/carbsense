@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import React, { useEffect, useState } from 'react';
 import { HiMenuAlt3 } from 'react-icons/hi';
 import { RiDashboardFill } from 'react-icons/ri';

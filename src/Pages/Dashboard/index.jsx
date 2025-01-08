@@ -88,18 +88,12 @@ function Index() {
       </div>
 
       {/* Tables with top 3 data only */}
-      <HealthTable
-        name="Active Machines Health Reports"
-        newdata={top3Active} 
-      />
+      <HealthTable name="Active Machines Health Reports" newdata={top3Active} />
       {/* <HealthTable
         name="Warning Machines Health Reports"
         newdata={top3Warning} 
       /> */}
-      <HealthTable
-        name="Inactive Machines Health Reports"
-        newdata={top3Inactive} 
-      />
+      <HealthTable name="Inactive Machines Health Reports" newdata={top3Inactive} />
     </div>
   );
 }
