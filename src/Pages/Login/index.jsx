@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdOutlineMail } from 'react-icons/md';
-import { CiLock } from "react-icons/ci";
+import { CiLock } from 'react-icons/ci';
 
 const images = ['/image_one.png', '/image_two.png', '/image_three.png'];
 
@@ -70,7 +70,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="relative">
-              <CiLock className="absolute text-[1.5rem] md:text-[1.8rem] text-[#626262] top-[20%] left-2"/>
+              <CiLock className="absolute text-[2rem] text-[#626262] top-[15%] left-2"/>
               <input
                 type="password"
                 placeholder="Password"
@@ -93,7 +93,7 @@ const LoginPage = () => {
             Have no account yet?
           </p>
           <div className="text-center">
-            <a href="#" className="inline-block px-4 py-2 border border-blue-600 text-blue-600 w-full rounded-xl">
+            <a href="#" className="inline-block px-4 py-2 border border-blue-600 text-blue-600 w-[100%] rounded-xl">
               Register Now
             </a>
           </div>
