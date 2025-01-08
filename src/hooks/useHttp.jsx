@@ -1,5 +1,8 @@
 import { useState, useCallback } from 'react';
 
+// const domain = 'http://localhost:5000/api/';
+const domain = 'https://naac-api-data-backend.iemamerica.com/api/';
+
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -13,11 +16,11 @@ const useHttp = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          ...headers,
-        },
+          ...headers
+        }
       };
 
-      const response = await fetch(url, options);
+      const response = await fetch(`${domain}${url}`, options);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -42,9 +45,9 @@ const useHttp = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...headers,
+          ...headers
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       };
 
       const response = await fetch(url, options);

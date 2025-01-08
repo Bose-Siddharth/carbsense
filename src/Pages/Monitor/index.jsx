@@ -1,90 +1,110 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import Topbar from '../../Components/Topbar';
 import GaugeView from '../../Components/Monitor/gaugeView/GaugeView';
-import ProductionCharts from '../../Components/Monitor/productionCharts/ProductionCharts';
 import OverviewCard from '../../Components/Monitor/overviewCard/OverviewCard';
 import InfoCard from '../../Components/Monitor/InfoCard';
 import FilterBox from '../../Components/Monitor/filterBox/FilterBox';
 import TrendsCharts from '../../Components/Monitor/trendsCharts/TrendsCharts';
 import { useParams } from 'react-router-dom';
+import useHttp from '../../hooks/useHttp';
 
-function generateDummyData(rows = 10, columns = 8) {
-  const categories = Array.from({ length: columns }, (_, i) => `Day ${i + 1}`);
-  const data = [];
-  for (let i = 0; i < rows; i++) {
-    const tempData = Array.from({ length: columns }, () => Math.floor(Math.random() * 101));
-    data.push({ name: `Interval ${i + 1} Temperature`, data: tempData });
-    const ppmData = Array.from({ length: columns }, () => Math.floor(Math.random() * 201));
-    data.push({ name: `Interval ${i + 1} PPM`, data: ppmData });
-  }
-  return { categories, data };
-}
-
-function generateDummyGaugeData() {
-  const gasTemperature = Math.floor(Math.random() * 101);
-  const gasLevel = Math.floor(Math.random() * 301);
-  const gasTemperaturePercentage = Math.min((gasTemperature / 100) * 100, 100);
-  const gasLevelPercentage = Math.min((gasLevel / 300) * 100, 100);
-  return {
-    gasTemperature: {
-      value: gasTemperature,
-      percentage: gasTemperaturePercentage
-    },
-    gasLevel: {
-      value: gasLevel,
-      percentage: gasLevelPercentage
-    }
-  };
-}
-
-function index() {
-  const { data, categories } = generateDummyData(5, 8);
-  const [dataGauge, setDataGauge] = useState(generateDummyGaugeData());
-  const [latestReading, setLatestReading] = useState(null);
-  const [categoriesTime, setCategoriesTime] = useState([...categories]);
+function Index() {
+  const { sendGetRequest } = useHttp();
   const { id } = useParams();
 
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newData = generateDummyGaugeData();
-      // console.log(id)
-      console.log('Generated Dummy Data:', newData);
-      setDataGauge({
-        gasTemperature: {
-          value: newData.gasTemperature.value,
-          percentage: newData.gasTemperature.percentage
-        },
-        gasLevel: {
-          value: newData.gasLevel.value,
-          percentage: newData.gasLevel.percentage
-        }
-      });
-      setLatestReading([newData.gasTemperature.value, newData.gasLevel.value]);
-      setCategoriesTime((prevCategories) => [...prevCategories, new Date().toLocaleTimeString()]);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const initialSeriesData = [
-    {
-      name: 'Gas Temperature',
-      data: Array.from({ length: categoriesTime.length }, () => Math.floor(Math.random() * 101))
-    },
-    {
-      name: 'Gas Level (PPM)',
-      data: Array.from({ length: categoriesTime.length }, () => Math.floor(Math.random() * 301))
-    }
-  ];
+  const [dataGauge, setDataGauge] = useState(null);
+  const [latestReading, setLatestReading] = useState(null);
+  const [categoriesTime, setCategoriesTime] = useState([]);
+  const [initialSeriesData, setInitialSeriesData] = useState([]);
 
   const thresholds = [
     { value: 250, color: '#FF0000' },
     { value: 150, color: '#FFA500' },
     { value: 0, color: '#1E90FF' }
   ];
+
+  // Fetch data periodically
+  const fetchDeviceData = async () => {
+    try {
+      const response = await sendGetRequest(`getDeviceStats/?id=${id}`);
+      const { currentTemperature, currentConcentration, historicalTemperatureData } = response;
+
+      // Update gauge data
+      setDataGauge({
+        gasTemperature: {
+          value: currentTemperature,
+          percentage: Math.min((currentTemperature / 100) * 100, 100)
+        },
+        gasLevel: {
+          value: currentConcentration,
+          percentage: Math.min((currentConcentration / 300) * 100, 100)
+        }
+      });
+
+      setCategoriesTime((prevCategories) => [
+        ...prevCategories,
+        ...historicalTemperatureData.map((dataPoint) =>
+          new Date(dataPoint.timestamp).toLocaleTimeString()
+        )
+      ]);
+
+      const temperatureData = historicalTemperatureData.map((dataPoint) =>
+        parseFloat(dataPoint.temperature)
+      );
+
+      setInitialSeriesData((prevSeriesData) => {
+        const updatedTemperatureSeries = {
+          name: 'Gas Temperature',
+          data: [...(prevSeriesData[0]?.data || []), ...temperatureData]
+        };
+
+        const updatedGasLevelSeries = {
+          name: 'Gas Level (PPM)',
+          data: [
+            ...(prevSeriesData[1]?.data || []),
+            ...Array(historicalTemperatureData.length).fill(currentConcentration)
+          ]
+        };
+
+        return [updatedTemperatureSeries, updatedGasLevelSeries];
+      });
+
+      setLatestReading([currentTemperature, currentConcentration]);
+    } catch (error) {
+      console.error('Error fetching device data:', error);
+    }
+  };
+
+  // Polling every 5 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchDeviceData();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [id]);
+
+  // Fallback dummy data in case of failure
+  useEffect(() => {
+    if (!dataGauge) {
+      setDataGauge({
+        gasTemperature: { value: 50, percentage: 50 },
+        gasLevel: { value: 150, percentage: 50 }
+      });
+
+      setCategoriesTime(Array.from({ length: 7 }, (_, i) => `0`));
+      setInitialSeriesData([ 
+        {
+          name: 'Gas Temperature',
+          data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 101))
+        },
+        {
+          name: 'Gas Level (PPM)',
+          data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 301))
+        }
+      ]);
+    }
+  }, [dataGauge]);
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
@@ -94,7 +114,7 @@ function index() {
           <FilterBox />
         </div>
         <div className="flex-1">
-          <InfoCard title="Gas Type" subTitle="Carbon Monoxide(CO)" />
+          <InfoCard title="Gas Type" subTitle="Carbon Monoxide (CO)" />
         </div>
         <div className="flex-1">
           <OverviewCard
@@ -107,41 +127,40 @@ function index() {
       </div>
       <div className="flex gap-5">
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
-          <GaugeView
-            title="Gas Temperature"
-            value={dataGauge.gasTemperature.value}
-            unit="°C"
-            percentage={dataGauge.gasTemperature.percentage}
-            thresholds={{ low: 30, high: 60 }}
-          />
-          <GaugeView
-            title="Gas Level (PPM)"
-            value={dataGauge.gasLevel.value}
-            unit="ppm"
-            percentage={dataGauge.gasLevel.percentage}
-            thresholds={{ low: 100, high: 200 }}
-          />
+          {dataGauge && (
+            <>
+              <GaugeView
+                title="Gas Temperature"
+                value={dataGauge.gasTemperature.value}
+                unit="°C"
+                percentage={dataGauge.gasTemperature.percentage}
+                thresholds={{ low: 30, high: 60 }}
+              />
+              <GaugeView
+                title="Gas Level (PPM)"
+                value={dataGauge.gasLevel.value}
+                unit="ppm"
+                percentage={dataGauge.gasLevel.percentage}
+                thresholds={{ low: 100, high: 200 }}
+              />
+            </>
+          )}
         </div>
         <div className="flex-1">
-          <TrendsCharts
-            title="Dynamic Trends Chart"
-            subtitle="Values updated dynamically"
-            categories={categoriesTime}
-            initialSeriesData={initialSeriesData}
-            latestReading={latestReading}
-            thresholds={thresholds}
-          />
+          {categoriesTime.length > 0 && initialSeriesData.length > 0 && (
+            <TrendsCharts
+              title="Dynamic Trends Chart"
+              subtitle="Values updated dynamically"
+              categories={categoriesTime}
+              initialSeriesData={initialSeriesData}
+              latestReading={latestReading}
+              thresholds={thresholds}
+            />
+          )}
         </div>
-      </div>
-      <div>
-        <ProductionCharts
-          title="Gas Temperature and PPM Trends"
-          data={data}
-          categories={categories}
-        />
       </div>
     </div>
   );
 }
 
-export default index;
+export default Index;
