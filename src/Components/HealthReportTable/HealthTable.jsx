@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Datajson from '../../Utils/Jsons/Dashboard/DashboardCard.json';
+// import Datajson from '../../Utils/Jsons/Dashboard/DashboardCard.json';
 import './heathTable.css';
 
 import Lottie from 'react-lottie';
@@ -15,9 +15,17 @@ const toSentenceCase = (str) => {
   return lowerCased.charAt(0).toUpperCase() + lowerCased.slice(1);
 };
 
-export const HealthTable = ({ name }) => {
+export const HealthTable = ({ name, newdata }) => {
   const navigate = useNavigate();
-  const { data = [] } = Datajson;
+  // const { data = [] } = Datajson;
+
+  let data = [];
+
+  for (let i = 0; i < newdata.length; i++) {
+    // if(newdata[i].status === 'Active' || newdata[i].status === 'Inactive' || newdata[i].status === 'Warning'){
+    data.push(newdata[i]);
+    // }
+  }
 
   const handleClick = (id) => {
     navigate(`/monitor/${id}`);
@@ -67,15 +75,11 @@ export const HealthTable = ({ name }) => {
     <div className="p-4 poppins">
       <h1 className="text-lg font-bold mb-4">{name}</h1>
       <div className="w-full border border-gray-300 rounded-lg overflow-hidden">
-        {/* Table Wrapper for Horizontal Scrolling */}
         <div className="overflow-x-auto">
-          {/* Table */}
           <table className="min-w-full table-auto">
-            {/* Table Head */}
             <thead>
               {filteredData.length > 0 && (
                 <tr className="bg-[#044A72] text-[#fff] font-semibold">
-                  {/* <th className="p-3 w-16 text-center border-b border-gray-300"> </th> */}
                   {headings.map((heading) => (
                     <th key={heading} className="p-3 text-center border-b border-gray-300">
                       {toSentenceCase(heading)}
@@ -86,7 +90,6 @@ export const HealthTable = ({ name }) => {
               )}
             </thead>
 
-            {/* Table Body */}
             <tbody className={`${filteredData.length > 0 ? 'h-64' : ''} overflow-y-auto`}>
               {filteredData.length > 0 ? (
                 filteredData.map((item, index) => (
@@ -96,7 +99,6 @@ export const HealthTable = ({ name }) => {
                     {headings.map((heading) => (
                       <td key={heading} className="p-3 text-center border-b border-gray-300">
                         <div className="">
-                          {/* Conditionally render the Lottie animation */}
                           {item[heading] === 'Active' && (
                             <Lottie options={activeLottieOptions} height={40} width={40} />
                           )}
@@ -106,7 +108,6 @@ export const HealthTable = ({ name }) => {
                           {item[heading] === 'Inactive' && (
                             <Lottie options={dangerLottieOptions} height={40} width={40} />
                           )}
-                          {/* Display the item[heading] text */}
                           <span>{item[heading]}</span>
                         </div>
                       </td>
@@ -115,7 +116,7 @@ export const HealthTable = ({ name }) => {
                       <button
                         className="px-4 w-40 py-2 bg-[#246d97] text-white rounded-lg hover:bg-[#15234b]"
                         onClick={() => {
-                          handleClick(item.id);
+                          handleClick(item.device_id);
                         }}>
                         Monitor View
                       </button>
@@ -138,5 +139,6 @@ export const HealthTable = ({ name }) => {
 };
 
 HealthTable.propTypes = {
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
+  newdata: PropTypes.string.isRequired
 };

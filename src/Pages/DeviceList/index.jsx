@@ -1,63 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalForm from '../../Components/ModalForm';
 import AddDeviceModal from '../../Utils/AddDeviceModal';
 import Topbar from '../../Components/Topbar';
 import { useNavigate } from 'react-router-dom';
-
-// Sample data
-const data = [
-  { id: 'A1B2C3', status: 'Active', zone: 'New York' },
-  { id: 'D4E5F6', status: 'Inactive', zone: 'Los Angeles' },
-  { id: 'G7H8I9', status: 'Active', zone: 'San Francisco' },
-  { id: 'J1K2L3', status: 'Inactive', zone: 'Seattle' },
-  { id: 'M4N5O6', status: 'Inactive', zone: 'Chicago' },
-  { id: 'P7Q8R9', status: 'Active', zone: 'Austin' },
-  { id: 'S1T2U3', status: 'Active', zone: 'Boston' },
-  { id: 'V4W5X6', status: 'Inactive', zone: 'Miami' },
-  { id: 'Y7Z8A9', status: 'Active', zone: 'Dallas' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' },
-  { id: 'B1C2D3', status: 'Inactive', zone: 'Denver' }
-];
+import useHttp from '../../hooks/useHttp';
 
 function Index() {
   const [searchCategory, setSearchCategory] = useState('ID');
@@ -67,14 +13,31 @@ function Index() {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState([]);
   const [editClick, setEditClick] = useState(false);
+  const [deviceStatuses, setDeviceStatuses] = useState([]); // State to store the backend data
   const navigate = useNavigate();
+  const { sendGetRequest } = useHttp();
+
+  // Fetch device data from backend
+  const fetchDeviceData = async () => {
+    try {
+      const response = await sendGetRequest(`dashboard`);
+      console.log(response);
+      setDeviceStatuses(response.deviceStatuses || []); // Store the fetched data in the state
+    } catch (error) {
+      console.error('Error fetching device data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDeviceData();
+  }, []);
 
   // Filter logic for search and status
-  const filteredData = data.filter((item) => {
+  const filteredData = deviceStatuses.filter((item) => {
     const matchesSearch =
       searchCategory === 'ID'
-        ? item.id.toLowerCase().includes(searchInput.toLowerCase())
-        : item.zone.toLowerCase().includes(searchInput.toLowerCase());
+        ? item.device_id.toLowerCase().includes(searchInput.toLowerCase())
+        : item.zone ? item.zone.toLowerCase().includes(searchInput.toLowerCase()) : false; // Assuming zone is optional in backend
     const matchesStatus =
       statusFilter === 'All' || item.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesSearch && matchesStatus;
@@ -138,14 +101,14 @@ function Index() {
       <div
         className="border rounded-lg overflow-auto"
         style={{
-          maxHeight: rowsPerPage === data.length ? '75vh' : '70vh' // '100vh' for "Show All", 24rem for other cases
+          maxHeight: rowsPerPage === deviceStatuses.length ? '75vh' : '70vh',
         }}>
         <table className="min-w-full text-left border-collapse">
           <thead>
             <tr className="bg-gray-200">
-              <th className="p-4 w-1/5">ID</th>
-              <th className="p-4 w-2/5">Zone</th>
-              <th className="p-4 w-1/5 text-center">Status</th>
+              <th className="p-4 w-1/5">Device ID</th>
+              <th className="p-4 w-2/5">Status</th>
+              <th className="p-4 w-1/5">Zone</th> {/* New Zone column */}
               <th className="p-4 w-1/5 text-center">Actions</th>
             </tr>
           </thead>
@@ -155,9 +118,8 @@ function Index() {
                 <tr
                   key={index}
                   className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'} hover:bg-gray-200`}>
-                  <td className="p-4">{item.id}</td>
-                  <td className="p-4">{item.zone}</td>
-                  <td className="p-4 text-center">
+                  <td className="p-4">{item.device_id}</td>
+                  <td className="p-4">
                     <span
                       className={`px-3 py-1 rounded-full text-white ${
                         item.status === 'Active' ? 'bg-green-500' : 'bg-red-500'
@@ -165,6 +127,7 @@ function Index() {
                       {item.status}
                     </span>
                   </td>
+                  <td className="p-4">{`zone-${index + 1}`}</td> {/* New Zone value */}
                   <td className="p-4 text-center">
                     <div className="flex justify-center gap-4">
                       <button
@@ -179,7 +142,7 @@ function Index() {
                       <button
                         className="bg-gray-500 text-white px-4 py-2 rounded-lg"
                         onClick={() => {
-                          navigate(`/monitor/${item.id}`);
+                          navigate(`/monitor/${item.device_id}`);
                         }}>
                         View More
                       </button>
@@ -225,7 +188,7 @@ function Index() {
             setRowsPerPage(newRowsPerPage);
             setCurrentPage(1); // Reset to first page
           }}>
-          <option value={data.length}>Show All</option>
+          <option value={deviceStatuses.length}>Show All</option>
           <option value="5">Show 5</option>
           <option value="10">Show 10</option>
           <option value="15">Show 15</option>
