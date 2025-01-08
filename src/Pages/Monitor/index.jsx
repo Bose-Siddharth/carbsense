@@ -11,7 +11,7 @@ import useHttp from '../../hooks/useHttp';
 function Index() {
   const { sendGetRequest } = useHttp();
   const { id } = useParams();
-
+  const [selectedOption, setSelectedOption] = useState("view_option1");
   const [dataGauge, setDataGauge] = useState(null);
   const [latestReading, setLatestReading] = useState(null);
   const [categoriesTime, setCategoriesTime] = useState([]);
@@ -23,13 +23,11 @@ function Index() {
     { value: 0, color: '#1E90FF' }
   ];
 
-  // Fetch data periodically
   const fetchDeviceData = async () => {
     try {
       const response = await sendGetRequest(`getDeviceStats/?id=${id}`);
       const { currentTemperature, currentConcentration, historicalTemperatureData } = response;
 
-      // Update gauge data
       setDataGauge({
         gasTemperature: {
           value: currentTemperature,
@@ -75,7 +73,6 @@ function Index() {
     }
   };
 
-  // Polling every 5 seconds
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchDeviceData();
@@ -84,7 +81,6 @@ function Index() {
     return () => clearInterval(intervalId);
   }, [id]);
 
-  // Fallback dummy data in case of failure
   useEffect(() => {
     if (!dataGauge) {
       setDataGauge({
@@ -106,13 +102,24 @@ function Index() {
     }
   }, [dataGauge]);
 
+  // useEffect(()=>{
+  //   console.log(dataGauge)
+  // },[dataGauge])
+
+  // useEffect(()=>{
+  //   console.log(categoriesTime)
+  // },[categoriesTime])
+
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <Topbar header="Monitor" notification={true} back={true} />
       <div className="sm:flex items-center gap-5 grid">
         <div className="flex-1">
-          <FilterBox />
+          <FilterBox 
+          onChange={(e) => setSelectedOption(e.target.value)}
+          />
         </div>
+        
         <div className="flex-1">
           <InfoCard title="Gas Type" subTitle="Carbon Monoxide (CO)" />
         </div>
@@ -125,6 +132,14 @@ function Index() {
           />
         </div>
       </div>
+      {selectedOption === "view_option2" && (
+        <button
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => window.print()} 
+        >
+          Print Page
+        </button>
+      )}
       <div className="flex gap-5">
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
           {dataGauge && (

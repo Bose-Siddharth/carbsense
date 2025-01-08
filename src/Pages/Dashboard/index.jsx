@@ -18,10 +18,9 @@ function Index() {
     deviceStatuses: []
   });
 
-  // Function to fetch machine data from API
   const fetchMachineData = async () => {
     try {
-      const response = await sendGetRequest('dashboard'); // Replace with your API endpoint
+      const response = await sendGetRequest('dashboard');
       const { totalDevices, activeDevices, inactiveDevices, warningDevices, deviceStatuses } =
         response;
 
@@ -39,12 +38,10 @@ function Index() {
     }
   };
 
-  // Fetch data when the component mounts
   useEffect(() => {
     fetchMachineData();
   }, []);
 
-  // Filter top 3 active, warning, and inactive machines
   const top3Active = machineStats.deviceStatuses
     .filter((device) => device.status === 'Active')
     .slice(0, 3);
@@ -62,32 +59,31 @@ function Index() {
         <div className="flex lg:flex-row flex-col justify-center items-center gap-8 lg:pt-4 pt-6">
           <MachineNumber
             title="Active Machines"
-            totalNumber={machineStats.activeDevices} // Dynamic value from the API
+            totalNumber={machineStats.activeDevices} 
             icon={activeMachine}
             description="Working fine"
           />
           <MachineNumber
             title="Warning Machines"
-            totalNumber={machineStats.warningDevices} // Dynamic value from the API
+            totalNumber={machineStats.warningDevices}
             icon={warningMachine}
             description="Warning!!!"
           />
           <MachineNumber
             title="Inactive Machines"
-            totalNumber={machineStats.inactiveDevices} // Dynamic value from the API
+            totalNumber={machineStats.inactiveDevices}
             icon={inactiveMachine}
             description="OOPS!!! Something is wrong!!!"
           />
           <MachineNumber
             title="Total Machines"
-            totalNumber={machineStats.totalDevices} // Dynamic value from the API
+            totalNumber={machineStats.totalDevices}
             icon={totalMachine}
             description="Overall"
           />
         </div>
       </div>
 
-      {/* Tables with top 3 data only */}
       <HealthTable name="Active Machines Health Reports" newdata={top3Active} />
       {/* <HealthTable
         name="Warning Machines Health Reports"
