@@ -8,7 +8,7 @@ function Layout({ children }) {
       <div className="fixed z-10 h-screen">
         <SideBar />
       </div>
-      <main className="px-24 pt-7 w-full relative z-0 min-h-screen h-full">{children}</main>
+      <main className=" pl-14 pt-7 w-full relative z-0 min-h-screen h-full">{children}</main>
     </section>
   );
 }
