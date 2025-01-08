@@ -65,7 +65,7 @@ const LoginPage = () => {
       <div className="flex items-center justify-center w-full md:w-[30%] bg-white p-8 rounded-lg">
         <div className="w-full outline-none">
           <div className="flex justify-center mb-6">
-            <img src="/sail_logo.png" alt="SAIL Logo" className="h-[8rem] md:h-[10rem]" />
+            {/* <img src="/sail_logo.png" alt="SAIL Logo" className="h-[8rem] md:h-[10rem]" /> */}
           </div>
           <h2 className="text-[1.5rem] md:text-[2rem] font-semibold text-[#053375] text-center mb-4">
             Sign in Now
