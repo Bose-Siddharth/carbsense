@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { MdOutlineMail } from 'react-icons/md';
 import { CiLock } from 'react-icons/ci';
+import { useNavigate } from 'react-router-dom';
 
 const images = ['/image_one.png', '/image_two.png', '/image_three.png'];
 
 const LoginPage = () => {
   const [currentImage, setCurrentImage] = useState(0);
+  const navigate = useNavigate();
+
+  const token = sessionStorage.getItem('token');
+  // console.log(token);
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,23 +31,20 @@ const LoginPage = () => {
       {/* Left Side Slider */}
       <div className="relative w-full md:w-[40%] h-[60vh] md:h-[90vh] flex justify-center items-center overflow-hidden">
         {images.map((image, index) => (
-          <div key={index} className="absolute w-full h-full transition-opacity duration-1000 rounded-[3%] overflow-hidden"
-               style={{ opacity: index === currentImage ? 1 : 0 }}>
+          <div
+            key={index}
+            className="absolute w-full h-full transition-opacity duration-1000 rounded-[3%] overflow-hidden"
+            style={{ opacity: index === currentImage ? 1 : 0 }}>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-            <img
-              src={image}
-              alt={`slide-${index}`}
-              className="w-full h-full object-cover"
-            />
+            <img src={image} alt={`slide-${index}`} className="w-full h-full object-cover" />
           </div>
         ))}
 
         <div className="absolute bottom-10 md:bottom-40 pl-6 text-white text-center z-20">
-          <h2 className="text-3xl md:text-4xl font-bold">
-            Welcome Back to SAIL Dashboard
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Welcome Back to SAIL Dashboard</h2>
           <p className="text-sm md:text-base mt-2">
-            Access your personalized dashboard to manage tasks, monitor progress, and stay connected with SAIL operations.
+            Access your personalized dashboard to manage tasks, monitor progress, and stay connected
+            with SAIL operations.
           </p>
         </div>
 
@@ -58,7 +67,9 @@ const LoginPage = () => {
           <div className="flex justify-center mb-6">
             <img src="/sail_logo.png" alt="SAIL Logo" className="h-[8rem] md:h-[10rem]" />
           </div>
-          <h2 className="text-[1.5rem] md:text-[2rem] font-semibold text-[#053375] text-center mb-4">Sign in Now</h2>
+          <h2 className="text-[1.5rem] md:text-[2rem] font-semibold text-[#053375] text-center mb-4">
+            Sign in Now
+          </h2>
           <form>
             <div className="relative">
               <MdOutlineMail className="absolute text-[1.5rem] md:text-[1.8rem] text-[#626262] top-[20%] left-2" />
@@ -70,7 +81,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="relative">
-              <CiLock className="absolute text-[2rem] text-[#626262] top-[15%] left-2"/>
+              <CiLock className="absolute text-[2rem] text-[#626262] top-[15%] left-2" />
               <input
                 type="password"
                 placeholder="Password"
@@ -84,16 +95,22 @@ const LoginPage = () => {
               </a>
             </div>
 
-            <button type="submit" className="w-full bg-[#053375] text-white py-3 rounded-xl mb-4">
+            <button
+              type="submit"
+              className="w-full bg-[#053375] text-white py-3 rounded-xl mb-4 "
+              onClick={() => {
+                navigate('/');
+                sessionStorage.setItem('token', 'abcd1234');
+              }}>
               Log in
             </button>
           </form>
 
-          <p className="text-center text-sm mb-4 text-[#626262]">
-            Have no account yet?
-          </p>
+          <p className="text-center text-sm mb-4 text-[#626262]">Have no account yet?</p>
           <div className="text-center">
-            <a href="#" className="inline-block px-4 py-2 border border-blue-600 text-blue-600 w-[100%] rounded-xl">
+            <a
+              href="#"
+              className="inline-block px-4 py-2 border border-blue-600 text-blue-600 w-[100%] rounded-xl">
               Register Now
             </a>
           </div>
