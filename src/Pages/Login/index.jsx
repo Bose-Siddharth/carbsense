@@ -41,10 +41,10 @@ const LoginPage = () => {
         ))}
 
         <div className="absolute bottom-10 md:bottom-40 pl-6 text-white text-center z-20">
-          <h2 className="text-3xl md:text-4xl font-bold">Welcome Back to SAIL Dashboard</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Welcome Back to CARBSENSE Dashboard</h2>
           <p className="text-sm md:text-base mt-2">
             Access your personalized dashboard to manage tasks, monitor progress, and stay connected
-            with SAIL operations.
+            with CARBSENSE operations.
           </p>
         </div>
 
