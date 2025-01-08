@@ -19,8 +19,8 @@ export const HealthTable = ({ name }) => {
   const navigate = useNavigate();
   const { data = [] } = Datajson;
 
-  const handleClick = () => {
-    navigate('/monitor');
+  const handleClick = (id) => {
+    navigate(`/monitor/${id}`);
   };
 
   const filteredData = data.filter((item) => {
@@ -114,7 +114,9 @@ export const HealthTable = ({ name }) => {
                     <td className="p-3 text-center border-b border-gray-300">
                       <button
                         className="px-4 w-40 py-2 bg-[#246d97] text-white rounded-lg hover:bg-[#15234b]"
-                        onClick={handleClick}>
+                        onClick={() => {
+                          handleClick(item.id);
+                        }}>
                         Monitor View
                       </button>
                     </td>
