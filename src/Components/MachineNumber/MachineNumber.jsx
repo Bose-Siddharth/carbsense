@@ -24,7 +24,7 @@ export const MachineNumber = ({ title, totalNumber, icon, description }) => {
           </p>
         </div>
         <div className="flex justify-center items-center">
-          <img src={icon} alt={title} className="w-36 h-32" />
+          <img src={icon} alt={title} className="lg:w-36 lg:h-32 w-48 h-28" />
         </div>
       </div>
     </div>

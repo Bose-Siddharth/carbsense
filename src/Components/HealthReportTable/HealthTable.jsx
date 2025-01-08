@@ -67,54 +67,57 @@ export const HealthTable = ({ name }) => {
     <div className="p-4 poppins">
       <h1 className="text-lg font-bold mb-4">{name}</h1>
       <div className="w-full border border-gray-300 rounded-lg overflow-hidden">
-        {/* Table Head */}
-        {filteredData.length > 0 && (
-          <div className="bg-[#044A72] text-[#fff] font-semibold flex w-full">
-            <div className="p-3 w-16 text-center border-b border-gray-300"> </div>
-            {headings.map((heading) => (
-              <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
-                {toSentenceCase(heading)}
-              </div>
-            ))}
-            <div className="p-3 w-32 text-center border-b border-gray-300">Actions</div>
-          </div>
-        )}
-
-        {/* Table Body */}
-        <div className={`${filteredData.length > 0 ? 'h-64' : ''} overflow-y-auto`}>
-          {filteredData.length > 0 ? (
-            filteredData.map((item, index) => (
-              <div
-                key={index}
-                className={`flex w-full ${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                } text-gray-800`}>
-                <div className="p-3 w-16 text-center border-b border-gray-300 flex items-center justify-center">
-                  {name === 'Active Machines Health Reports' ? (
-                    <Lottie options={activeLottieOptions} height={40} width={40} />
-                  ) : name === 'Warning Machines Health Reports' ? (
-                    <Lottie options={warningLottieOptions} height={40} width={40} />
-                  ) : (
-                    <Lottie options={dangerLottieOptions} height={40} width={40} />
-                  )}
+        {/* Table Wrapper for Horizontal Scrolling */}
+        <div className="overflow-x-auto">
+          {/* Table Head */}
+          {filteredData.length > 0 && (
+            <div className="bg-[#044A72] text-[#fff] font-semibold flex min-w-[600px] w-full">
+              <div className="p-3 w-16 text-center border-b border-gray-300"> </div>
+              {headings.map((heading) => (
+                <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
+                  {toSentenceCase(heading)}
                 </div>
-                {headings.map((heading) => (
-                  <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
-                    {item[heading]}
-                  </div>
-                ))}
-                <div className="p-3 text-center border-b border-gray-300">
-                  <button
-                    className="px-4 py-2 bg-[#246d97] text-white rounded-lg hover:bg-[#15234b]"
-                    onClick={handleClick}>
-                    Monitor View
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="p-4 text-center text-gray-500">No data available</div>
+              ))}
+              <div className="p-3 w-32 text-center border-b border-gray-300">Actions</div>
+            </div>
           )}
+
+          {/* Table Body */}
+          <div className={`${filteredData.length > 0 ? 'h-64' : ''} overflow-y-auto`}>
+            {filteredData.length > 0 ? (
+              filteredData.map((item, index) => (
+                <div
+                  key={index}
+                  className={`flex min-w-[600px] w-full ${
+                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                  } text-gray-800`}>
+                  <div className="p-3 w-16 text-center border-b border-gray-300 flex items-center justify-center">
+                    {name === 'Active Machines Health Reports' ? (
+                      <Lottie options={activeLottieOptions} height={40} width={40} />
+                    ) : name === 'Warning Machines Health Reports' ? (
+                      <Lottie options={warningLottieOptions} height={40} width={40} />
+                    ) : (
+                      <Lottie options={dangerLottieOptions} height={40} width={40} />
+                    )}
+                  </div>
+                  {headings.map((heading) => (
+                    <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
+                      {item[heading]}
+                    </div>
+                  ))}
+                  <div className="p-3 text-center border-b border-gray-300">
+                    <button
+                      className="px-4 py-2 bg-[#246d97] text-white rounded-lg hover:bg-[#15234b]"
+                      onClick={handleClick}>
+                      Monitor View
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-4 text-center text-gray-500">No data available</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
