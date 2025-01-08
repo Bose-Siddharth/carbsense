@@ -1,11 +1,57 @@
 .dropDownProfile {
   position: absolute;
-  top: 7.5%;
-  right: 11%;
+  top: 60%;
+  /* left: 10%; */
+  right: 80%;
   background-color: aliceblue;
   width: 350px;
   height: fit-content;
   border-radius: 10px;
   padding: 10px;
   max-width: 350px; /* Set consistent width */
+}
+
+@media (max-width:560px){
+  .dropDownProfile {
+    position: absolute;
+    top: 2rem;
+    /* left: -100%; */
+    right: -2rem;
+    background-color: aliceblue;
+    width: 350px;
+    height: fit-content;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 350px; /* Set consistent width */
+  }
+}
+
+@media (max-width:490px){
+  .dropDownProfile {
+    position: absolute;
+    top: 2.2rem;
+    /* left: -100%; */
+    right: -4rem;
+    background-color: aliceblue;
+    width: 350px;
+    height: fit-content;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 350px; /* Set consistent width */
+  }
+}
+
+@media (max-width:478px){
+  .dropDownProfile {
+    position: absolute;
+    top: 2.2rem;
+    left: -6.5rem;
+    /* right: 5rem; */
+    background-color: aliceblue;
+    width: 280px;
+    height: fit-content;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 350px; /* Set consistent width */
+  }
 }

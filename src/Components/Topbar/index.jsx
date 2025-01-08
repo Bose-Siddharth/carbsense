@@ -24,9 +24,11 @@ function TopBar({ header, notification = false, back = false }) {
   }, [openNotification]);
 
   return (
-    <div className="flex flex-1 justify-between items-center border-b border-black px-4 py-2 mr-5">
+    <div className="flex flex-col sm:flex-row justify-between items-center border-b border-black px-4 py-2 space-y-4 sm:space-y-0 sm:space-x-5">
       {/* Header */}
-      <h1 className="font-semibold text-4xl whitespace-pre">{header}</h1>
+      <h1 className="font-semibold text-2xl sm:text-4xl text-center sm:text-left whitespace-pre">
+        {header}
+      </h1>
 
       {/* Right Controls */}
       <div className="flex space-x-6">
@@ -35,7 +37,7 @@ function TopBar({ header, notification = false, back = false }) {
           <div className="relative flex items-center group notification-dropdown">
             {/* Notification Icon */}
             <IoNotificationsSharp
-              className="text-3xl cursor-pointer"
+              className="text-2xl sm:text-3xl cursor-pointer"
               onClick={() => setOpenNotification(!openNotification)}
             />
             {/* <RiMessage3Fill
@@ -60,7 +62,7 @@ function TopBar({ header, notification = false, back = false }) {
           <div className="relative flex items-center group">
             {/* Back Icon */}
             <RiArrowGoBackFill
-              className="text-3xl cursor-pointer text-black"
+              className="text-2xl sm:text-3xl cursor-pointer text-black"
               onClick={handleBack}
             />
 

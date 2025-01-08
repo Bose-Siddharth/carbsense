@@ -69,55 +69,66 @@ export const HealthTable = ({ name }) => {
       <div className="w-full border border-gray-300 rounded-lg overflow-hidden">
         {/* Table Wrapper for Horizontal Scrolling */}
         <div className="overflow-x-auto">
-          {/* Table Head */}
-          {filteredData.length > 0 && (
-            <div className="bg-[#044A72] text-[#fff] font-semibold flex min-w-[600px] w-full">
-              <div className="p-3 w-16 text-center border-b border-gray-300"> </div>
-              {headings.map((heading) => (
-                <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
-                  {toSentenceCase(heading)}
-                </div>
-              ))}
-              <div className="p-3 w-32 text-center border-b border-gray-300">Actions</div>
-            </div>
-          )}
-
-          {/* Table Body */}
-          <div className={`${filteredData.length > 0 ? 'h-64' : ''} overflow-y-auto`}>
-            {filteredData.length > 0 ? (
-              filteredData.map((item, index) => (
-                <div
-                  key={index}
-                  className={`flex min-w-[600px] w-full ${
-                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                  } text-gray-800`}>
-                  <div className="p-3 w-16 text-center border-b border-gray-300 flex items-center justify-center">
-                    {name === 'Active Machines Health Reports' ? (
-                      <Lottie options={activeLottieOptions} height={40} width={40} />
-                    ) : name === 'Warning Machines Health Reports' ? (
-                      <Lottie options={warningLottieOptions} height={40} width={40} />
-                    ) : (
-                      <Lottie options={dangerLottieOptions} height={40} width={40} />
-                    )}
-                  </div>
+          {/* Table */}
+          <table className="min-w-full table-auto">
+            {/* Table Head */}
+            <thead>
+              {filteredData.length > 0 && (
+                <tr className="bg-[#044A72] text-[#fff] font-semibold">
+                  {/* <th className="p-3 w-16 text-center border-b border-gray-300"> </th> */}
                   {headings.map((heading) => (
-                    <div key={heading} className="p-3 flex-1 text-center border-b border-gray-300">
-                      {item[heading]}
-                    </div>
+                    <th key={heading} className="p-3 text-center border-b border-gray-300">
+                      {toSentenceCase(heading)}
+                    </th>
                   ))}
-                  <div className="p-3 text-center border-b border-gray-300">
-                    <button
-                      className="px-4 py-2 bg-[#246d97] text-white rounded-lg hover:bg-[#15234b]"
-                      onClick={handleClick}>
-                      Monitor View
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="p-4 text-center text-gray-500">No data available</div>
-            )}
-          </div>
+                  <th className="p-3 w-32 text-center border-b border-gray-300">Actions</th>
+                </tr>
+              )}
+            </thead>
+
+            {/* Table Body */}
+            <tbody className={`${filteredData.length > 0 ? 'h-64' : ''} overflow-y-auto`}>
+              {filteredData.length > 0 ? (
+                filteredData.map((item, index) => (
+                  <tr
+                    key={index}
+                    className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} text-gray-800`}>
+                    {headings.map((heading) => (
+                      <td key={heading} className="p-3 text-center border-b border-gray-300">
+                        <div className="">
+                          {/* Conditionally render the Lottie animation */}
+                          {item[heading] === 'Active' && (
+                            <Lottie options={activeLottieOptions} height={40} width={40} />
+                          )}
+                          {item[heading] === 'Warning' && (
+                            <Lottie options={warningLottieOptions} height={40} width={40} />
+                          )}
+                          {item[heading] === 'Inactive' && (
+                            <Lottie options={dangerLottieOptions} height={40} width={40} />
+                          )}
+                          {/* Display the item[heading] text */}
+                          <span>{item[heading]}</span>
+                        </div>
+                      </td>
+                    ))}
+                    <td className="p-3 text-center border-b border-gray-300">
+                      <button
+                        className="px-4 w-40 py-2 bg-[#246d97] text-white rounded-lg hover:bg-[#15234b]"
+                        onClick={handleClick}>
+                        Monitor View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={headings.length + 2} className="p-4 text-center text-gray-500">
+                    No data available
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

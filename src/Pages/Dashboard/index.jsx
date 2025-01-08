@@ -10,8 +10,10 @@ import { HealthTable } from '../../Components/HealthReportTable/HealthTable';
 function index() {
   return (
     <div className="poppins w-full">
+      {/* <div className="hidden md:block"> */}
       <Topbar header="Dashboard" notification="true" back="true" />
-      <div className="lg:p-4 w-full">
+      {/* </div> */}
+      <div className="lg:p-4 flex flex-col justify-center">
         <div className="flex lg:flex-row flex-col justify-center items-center gap-8 lg:pt-4 pt-6">
           <MachineNumber
             title="Active Machines"

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'; // Import PropTypes
 
 export const MachineNumber = ({ title, totalNumber, icon, description }) => {
   return (
-    <div className="w-full justify-between lg:w-2/6 bg-white rounded-lg py-9 px-5 shadow-md poppins">
+    <div className="w-[90%] md:w-full justify-between lg:w-2/6 bg-white rounded-lg lg:py-9 lg:px-5 px-3 py-5 shadow-md poppins">
       <div>
         <h2 className="text-[1.5rem] font-semibold">{title}</h2>
       </div>
