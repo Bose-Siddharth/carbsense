@@ -1,0 +1,17 @@
+{
+    "notifications": [
+      {
+        "title": "New Message",
+        "description": "You have a new notification."
+      },
+      {
+        "title": "Reminder",
+        "description": "Do not forget your meeting at 3 PM."
+      },
+      {
+        "title": "Task Update",
+        "description": "Your task has been marked complete."
+      }
+    ]
+  }
+  

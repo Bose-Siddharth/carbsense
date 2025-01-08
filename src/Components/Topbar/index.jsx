@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { RiMessage3Fill, RiArrowGoBackFill } from 'react-icons/ri';
+import { RiArrowGoBackFill } from 'react-icons/ri';
+import { IoNotificationsSharp } from 'react-icons/io5';
 import DropDownNotification from '../../Components/DropDownNotification';
 
 function TopBar({ header, notification = false, back = false }) {
@@ -35,10 +36,14 @@ function TopBar({ header, notification = false, back = false }) {
         {notification && (
           <div className="relative flex items-center group notification-dropdown">
             {/* Notification Icon */}
-            <RiMessage3Fill
+            <IoNotificationsSharp
               className="text-2xl sm:text-3xl cursor-pointer"
               onClick={() => setOpenNotification(!openNotification)}
             />
+            {/* <RiMessage3Fill
+              className="text-3xl cursor-pointer"
+              onClick={() => setOpenNotification(!openNotification)}
+            /> */}
 
             {/* Tooltip */}
             {!openNotification && (
