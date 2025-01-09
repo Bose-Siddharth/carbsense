@@ -4,8 +4,9 @@ import { RiArrowGoBackFill } from 'react-icons/ri';
 import { IoNotificationsSharp } from 'react-icons/io5';
 import DropDownNotification from '../../Components/DropDownNotification';
 
-function TopBar({ header, notification = false, back = false }) {
+function TopBar({ header, notification = false, back = false, data }) {
   const [openNotification, setOpenNotification] = useState(false);
+  console.log(data)
 
   const handleBack = () => {
     window.history.back();
@@ -24,7 +25,7 @@ function TopBar({ header, notification = false, back = false }) {
   }, [openNotification]);
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-center border-b border-black px-4 py-2 space-y-4 sm:space-y-0 sm:space-x-5">
+    <div className="flex flex-col w-full sm:flex-row justify-between items-center border-b border-black px-4 py-2 space-y-4 sm:space-y-0 sm:space-x-5">
       {/* Header */}
       <h1 className="font-semibold text-2xl sm:text-4xl text-center sm:text-left whitespace-pre">
         {header}
@@ -36,10 +37,13 @@ function TopBar({ header, notification = false, back = false }) {
         {notification && (
           <div className="relative flex items-center group notification-dropdown">
             {/* Notification Icon */}
-            <IoNotificationsSharp
-              className="text-2xl sm:text-3xl cursor-pointer"
-              onClick={() => setOpenNotification(!openNotification)}
-            />
+            <div className="relative">
+              <IoNotificationsSharp
+                className="text-2xl sm:text-3xl cursor-pointer"
+                onClick={() => setOpenNotification(!openNotification)}
+              />
+              <div className="bg-red-500 w-2 h-2 rounded-full absolute top-0 right-0"></div>
+            </div>
             {/* <RiMessage3Fill
               className="text-3xl cursor-pointer"
               onClick={() => setOpenNotification(!openNotification)}
@@ -53,7 +57,7 @@ function TopBar({ header, notification = false, back = false }) {
             )}
 
             {/* Dropdown */}
-            {openNotification && <DropDownNotification />}
+            {openNotification && <DropDownNotification data={data? data:[]}/>}
           </div>
         )}
 
