@@ -42,7 +42,7 @@ function TopBar({ header, notification = false, back = false, data }) {
                 className="text-2xl sm:text-3xl cursor-pointer"
                 onClick={() => setOpenNotification(!openNotification)}
               />
-              <div className="bg-red-500 w-2 h-2 rounded-full absolute top-0 right-0"></div>
+              {data.length>0 && <div className="bg-red-500 w-2 h-2 rounded-full absolute top-0 right-0"></div>}
             </div>
             {/* <RiMessage3Fill
               className="text-3xl cursor-pointer"
