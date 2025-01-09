@@ -29,23 +29,28 @@ function Index() {
     }
   };
 
-  const fetchAlert=async()=>{
-    const response= await sendGetRequest(`dashboard/alert`);
-    console.log(response.data)
+  const fetchAlert = async () => {
+    const response = await sendGetRequest(`dashboard/alert`);
+    console.log(response.data);
     setAlert(response.data);
-  }
+  };
 
   useEffect(() => {
     fetchDeviceData();
     fetchAlert();
+    localStorage.clear();
   }, []);
+
+
 
   // Filter logic for search and status
   const filteredData = deviceStatuses.filter((item) => {
     const matchesSearch =
       searchCategory === 'ID'
         ? item.device_id.toLowerCase().includes(searchInput.toLowerCase())
-        : item.zone ? item.zone.toLowerCase().includes(searchInput.toLowerCase()) : false; // Assuming zone is optional in backend
+        : item.zone
+        ? item.zone.toLowerCase().includes(searchInput.toLowerCase())
+        : false; // Assuming zone is optional in backend
     const matchesStatus =
       statusFilter === 'All' || item.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesSearch && matchesStatus;
@@ -68,10 +73,15 @@ function Index() {
     <div className="p-4">
       {/* Topbar */}
       <div className="flex justify-between items-center mb-4">
-        <Topbar header="Device List" notification="false" back="true" data={alert.length>0?alert:[]}/>
+        <Topbar
+          header="Device List"
+          notification="false"
+          back="true"
+          data={alert.length > 0 ? alert : []}
+        />
       </div>
 
-      <div className='mb-4'>
+      <div className="mb-4">
         <AddDeviceModal>
           <ModalForm />
         </AddDeviceModal>
@@ -112,7 +122,7 @@ function Index() {
       <div
         className="border rounded-lg overflow-auto"
         style={{
-          maxHeight: rowsPerPage === deviceStatuses.length ? '75vh' : '70vh',
+          maxHeight: rowsPerPage === deviceStatuses.length ? '75vh' : '70vh'
         }}>
         <table className="min-w-full text-left border-collapse">
           <thead>
@@ -153,7 +163,9 @@ function Index() {
                       <button
                         className="bg-gray-500 text-white px-4 py-2 rounded-lg"
                         onClick={() => {
-                          navigate(`/monitor/${item.device_id}`);
+                          localStorage.setItem('id', item.device_id);
+                          const idToNavigate = localStorage.getItem('id');
+                          navigate(`/monitor/${idToNavigate}`);
                         }}>
                         View More
                       </button>
