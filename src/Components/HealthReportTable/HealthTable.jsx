@@ -28,7 +28,9 @@ export const HealthTable = ({ name, newdata }) => {
   }
 
   const handleClick = (id) => {
-    navigate(`/monitor/${id}`);
+    localStorage.setItem("id",id);
+    const idToNavigate=localStorage.getItem("id");
+    navigate(`/monitor/${idToNavigate}`);
   };
 
   const filteredData = data.filter((item) => {

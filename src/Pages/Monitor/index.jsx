@@ -10,8 +10,9 @@ import useHttp from '../../hooks/useHttp';
 
 function Index() {
   const { sendGetRequest } = useHttp();
-  const { id } = useParams();
-  const [selectedOption, setSelectedOption] = useState("view_option1");
+  // const { id } = useParams();
+  const id = localStorage.getItem('id');
+  const [selectedOption, setSelectedOption] = useState('view_option1');
   const [dataGauge, setDataGauge] = useState(null);
   const [latestReading, setLatestReading] = useState(null);
   const [categoriesTime, setCategoriesTime] = useState([]);
@@ -74,16 +75,16 @@ function Index() {
     }
   };
 
-  const fetchAlert=async(device_id)=>{
-    console.log(device_id)
-    const response= await sendGetRequest(`dashboard/alert?device_id=${device_id}`);
-    console.log(response.data)
+  const fetchAlert = async (device_id) => {
+    console.log(device_id);
+    const response = await sendGetRequest(`dashboard/alert?device_id=${device_id}`);
+    console.log(response.data);
     setAlert(response.data);
-  }
+  };
 
-  useEffect(()=>{
-  fetchAlert(id);
-  },[id])
+  useEffect(() => {
+    fetchAlert(id);
+  }, [id]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -101,7 +102,7 @@ function Index() {
       });
 
       setCategoriesTime(Array.from({ length: 7 }, (_, i) => `0`));
-      setInitialSeriesData([ 
+      setInitialSeriesData([
         {
           name: 'Gas Temperature',
           data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 101))
@@ -124,14 +125,17 @@ function Index() {
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      <Topbar header="Monitor" notification={true} back={true} data={alert.length>0?alert:[]}/>
+      <Topbar
+        header="Monitor"
+        notification={true}
+        back={true}
+        data={alert.length > 0 ? alert : []}
+      />
       <div className="flex-row lg:gap-12 lg:flex items-center">
         <div className="flex-1 mb-4">
-          <FilterBox 
-          onChange={(e) => setSelectedOption(e.target.value)}
-          />
+          <FilterBox onChange={(e) => setSelectedOption(e.target.value)} />
         </div>
-        
+
         <div className="flex-1 mb-4">
           <InfoCard title="Gas Type" subTitle="Carbon Monoxide (CO)" />
         </div>
@@ -144,18 +148,17 @@ function Index() {
           />
         </div>
       </div>
-      {selectedOption === "view_option2" && (
+      {selectedOption === 'view_option2' && (
         <button
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => window.print()} 
-        >
+          onClick={() => window.print()}>
           Print Page
         </button>
       )}
       <div className="block gap-5 lg:flex">
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
           {dataGauge && (
-            <div className='block md:flex md:justify-between '>
+            <div className="block md:flex md:justify-between ">
               <GaugeView
                 title="Gas Temperature"
                 value={dataGauge.gasTemperature.value}

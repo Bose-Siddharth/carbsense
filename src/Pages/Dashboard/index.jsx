@@ -6,10 +6,10 @@ import warningMachine from '../../assets/broken_11201792.gif';
 import inactiveMachine from '../../assets/terrorism_15597286.gif';
 import totalMachine from '../../assets/settings_11260823.gif';
 import { HealthTable } from '../../Components/HealthReportTable/HealthTable';
-import useHttp from '../../hooks/useHttp'; 
+import useHttp from '../../hooks/useHttp';
 
 function Index() {
-  const { sendGetRequest } = useHttp(); 
+  const { sendGetRequest } = useHttp();
   const [alert, setAlert] = useState([]);
   const [machineStats, setMachineStats] = useState({
     totalDevices: 0,
@@ -18,6 +18,10 @@ function Index() {
     inactiveDevices: 0,
     deviceStatuses: []
   });
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const fetchMachineData = async () => {
     try {
@@ -39,11 +43,11 @@ function Index() {
     }
   };
 
-  const fetchAlert=async()=>{
-    const response= await sendGetRequest(`dashboard/alert`);
-    console.log(response.data)
+  const fetchAlert = async () => {
+    const response = await sendGetRequest(`dashboard/alert`);
+    console.log(response.data);
     setAlert(response.data);
-  }
+  };
 
   useEffect(() => {
     fetchMachineData();
@@ -62,12 +66,17 @@ function Index() {
 
   return (
     <div className="poppins w-full">
-      <Topbar header="Dashboard" notification="true" back="true" data={alert.length>0?alert:[]}/>
+      <Topbar
+        header="Dashboard"
+        notification="true"
+        back="true"
+        data={alert.length > 0 ? alert : []}
+      />
       <div className="lg:p-4 flex flex-col justify-center">
         <div className="flex lg:flex-row flex-col justify-center items-center gap-8 lg:pt-4 pt-6">
           <MachineNumber
             title="Active Machines"
-            totalNumber={machineStats.activeDevices} 
+            totalNumber={machineStats.activeDevices}
             icon={activeMachine}
             description="Working fine"
           />
