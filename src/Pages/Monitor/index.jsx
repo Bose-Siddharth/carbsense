@@ -16,6 +16,7 @@ function Index() {
   const [latestReading, setLatestReading] = useState(null);
   const [categoriesTime, setCategoriesTime] = useState([]);
   const [initialSeriesData, setInitialSeriesData] = useState([]);
+  const [alert, setAlert] = useState([]);
 
   const thresholds = [
     { value: 250, color: '#FF0000' },
@@ -73,6 +74,17 @@ function Index() {
     }
   };
 
+  const fetchAlert=async(device_id)=>{
+    console.log(device_id)
+    const response= await sendGetRequest(`dashboard/alert?device_id=${device_id}`);
+    console.log(response.data)
+    setAlert(response.data);
+  }
+
+  useEffect(()=>{
+  fetchAlert(id);
+  },[id])
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchDeviceData();
@@ -112,18 +124,18 @@ function Index() {
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      <Topbar header="Monitor" notification={true} back={true} />
-      <div className="sm:flex items-center gap-5 grid">
-        <div className="flex-1">
+      <Topbar header="Monitor" notification={true} back={true} data={alert.length>0?alert:[]}/>
+      <div className="flex-row lg:gap-12 lg:flex items-center">
+        <div className="flex-1 mb-4">
           <FilterBox 
           onChange={(e) => setSelectedOption(e.target.value)}
           />
         </div>
         
-        <div className="flex-1">
+        <div className="flex-1 mb-4">
           <InfoCard title="Gas Type" subTitle="Carbon Monoxide (CO)" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 mb-4">
           <OverviewCard
             sensorId="SENSOR12345"
             sensorStatus="Active"
@@ -140,10 +152,10 @@ function Index() {
           Print Page
         </button>
       )}
-      <div className="flex gap-5">
+      <div className="block gap-5 lg:flex">
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
           {dataGauge && (
-            <>
+            <div className='block md:flex md:justify-between '>
               <GaugeView
                 title="Gas Temperature"
                 value={dataGauge.gasTemperature.value}
@@ -158,7 +170,7 @@ function Index() {
                 percentage={dataGauge.gasLevel.percentage}
                 thresholds={{ low: 100, high: 200 }}
               />
-            </>
+            </div>
           )}
         </div>
         <div className="flex-1">

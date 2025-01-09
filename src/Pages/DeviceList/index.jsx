@@ -7,6 +7,7 @@ import useHttp from '../../hooks/useHttp';
 
 function Index() {
   const [searchCategory, setSearchCategory] = useState('ID');
+  const [alert, setAlert] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [rowsPerPage, setRowsPerPage] = useState(5); // Default rows to 5
@@ -28,8 +29,15 @@ function Index() {
     }
   };
 
+  const fetchAlert=async()=>{
+    const response= await sendGetRequest(`dashboard/alert`);
+    console.log(response.data)
+    setAlert(response.data);
+  }
+
   useEffect(() => {
     fetchDeviceData();
+    fetchAlert();
   }, []);
 
   // Filter logic for search and status
@@ -60,7 +68,10 @@ function Index() {
     <div className="p-4">
       {/* Topbar */}
       <div className="flex justify-between items-center mb-4">
-        <Topbar header="Device List" notification="false" back="true" />
+        <Topbar header="Device List" notification="false" back="true" data={alert.length>0?alert:[]}/>
+      </div>
+
+      <div className='mb-4'>
         <AddDeviceModal>
           <ModalForm />
         </AddDeviceModal>
