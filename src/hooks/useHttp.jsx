@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react';
 
 // const domain = 'http://localhost:5000/api/';
-const domain = 'https://naac-api-data-backend.iemamerica.com/api/';
+// const domain = 'https://naac-api-data-backend.iemamerica.com/api/';
 // const domain = 'http://192.168.90.24:8080/api/';
+const domain = 'https://carb-sense.iemamerica.com/api/';
+
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
