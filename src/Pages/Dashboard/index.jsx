@@ -32,8 +32,8 @@ function Index() {
       console.log(response);
 
       setMachineStats({
-        totalDevices,
-        activeDevices,
+        "totalDevices":1,
+        "activeDevices":1,
         inactiveDevices,
         warningDevices,
         deviceStatuses
