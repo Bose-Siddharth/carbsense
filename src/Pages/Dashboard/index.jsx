@@ -56,13 +56,13 @@ function Index() {
 
   const top3Active = machineStats.deviceStatuses
     .filter((device) => device.status === 'Active')
-    .slice(0, 3);
+    .slice(0, 1);
   const top3Warning = machineStats.deviceStatuses
     .filter((device) => device.status === 'Warning')
-    .slice(0, 3);
+    .slice(0, 1);
   const top3Inactive = machineStats.deviceStatuses
     .filter((device) => device.status === 'Inactive')
-    .slice(0, 3);
+    .slice(0, 1);
 
   return (
     <div className="poppins w-full">

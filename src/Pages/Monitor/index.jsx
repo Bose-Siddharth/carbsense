@@ -20,8 +20,8 @@ function Index() {
   const [alert, setAlert] = useState([]);
 
   const thresholds = [
-    { value: 250, color: '#FF0000' },
-    { value: 150, color: '#FFA500' },
+    { value: 50, color: '#FF0000' },
+    { value: 20, color: '#FFA500' },
     { value: 0, color: '#1E90FF' }
   ];
 
@@ -97,20 +97,22 @@ function Index() {
   useEffect(() => {
     if (!dataGauge) {
       setDataGauge({
-        gasTemperature: { value: 50, percentage: 50 },
-        gasLevel: { value: 150, percentage: 50 }
+        gasTemperature: { value: 0, percentage: 0 },
+        gasLevel: { value: 0, percentage: 0 }
       });
 
       setCategoriesTime(Array.from({ length: 7 }, (_, i) => `0`));
       setInitialSeriesData([
         {
           name: 'Gas Temperature',
-          data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 101))
+          data: Array.from({ length: 7 }, () => 0),
+          color: '#1E90FF', // Blue color for temperature
         },
         {
           name: 'Gas Level (PPM)',
-          data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 301))
-        }
+          data: Array.from({ length: 7 }, () => 0),
+          color: '#FF4500', // Orange-red color for gas level
+        },
       ]);
     }
   }, [dataGauge]);
@@ -160,7 +162,7 @@ function Index() {
           {dataGauge && (
             <div className="block md:flex md:justify-between ">
               <GaugeView
-                title="Gas Temperature"
+                title="Board Temperature"
                 value={dataGauge.gasTemperature.value}
                 unit="°C"
                 percentage={dataGauge.gasTemperature.percentage}

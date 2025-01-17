@@ -135,7 +135,7 @@ function Index() {
           </thead>
           <tbody>
             {paginatedData.length > 0 ? (
-              paginatedData.map((item, index) => (
+              paginatedData.slice(0, 1).map((item, index) => (
                 <tr
                   key={index}
                   className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'} hover:bg-gray-200`}>
