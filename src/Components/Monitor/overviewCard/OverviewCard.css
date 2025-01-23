@@ -1,0 +1,43 @@
+.overview-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sensor-id {
+  font-weight: bold;
+}
+
+.sensor-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-text {
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.values-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.value-item {
+  text-align: center;
+}
+
+.separator {
+  border-left: 1px solid #ccc;
+  height: 30px;
+  margin: 0 10px;
+}

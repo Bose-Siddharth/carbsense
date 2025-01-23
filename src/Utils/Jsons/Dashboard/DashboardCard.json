@@ -1,0 +1,24 @@
+{
+    "data": [
+      {"id": "A1B2C3", "status": "Active", "zone": "Zone-N"},
+      {"id": "D4E5F6", "status": "Inactive", "zone": "Zone-Y"},
+      {"id": "G7H8I9", "status": "Active", "zone": "Zone-R"},
+      {"id": "J1K2L3", "status": "Inactive", "zone": "Zone-M"},
+      {"id": "M4N5O6", "status": "Inactive", "zone": "Zone-K"},
+      {"id": "P7Q8R9", "status": "Active", "zone": "Zone-O"},
+      {"id": "S1T2U3", "status": "Active", "zone": "Zone-E"},
+      {"id": "V4W5X6", "status": "Inactive", "zone": "Zone-W"},
+      {"id": "Y7Z8A9", "status": "Active", "zone": "Zone-Y"},
+      {"id": "B1C2D3", "status": "Inactive", "zone": "Zone-F"},
+      {"id": "L3M4N5", "status": "Warning", "zone": "Zone-T"},
+      {"id": "O6P7Q8", "status": "Warning", "zone": "Zone-V"},
+      {"id": "R9S1T2", "status": "Warning", "zone": "Zone-B"},
+      {"id": "U4V5W6", "status": "Warning", "zone": "Zone-A"},
+      {"id": "X7Y8Z9", "status": "Warning", "zone": "Zone-D"}
+    ],
+    "totalActiveMachines": 500,
+    "totalWarnningMachines": 500,
+    "totalDamageMachines": 500,
+    "totalMachines": 500
+  }
+  
