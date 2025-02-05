@@ -60,6 +60,7 @@ const useHttp = () => {
       const response = await fetch(`${domain}${url}`, options);
 
       if (!response.ok) {
+        return response.json();
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 

@@ -8,6 +8,8 @@ import TrendsCharts from '../../Components/Monitor/trendsCharts/TrendsCharts';
 import { useParams } from 'react-router-dom';
 import useHttp from '../../hooks/useHttp';
 import DataChart from '../../Components/ChartsUi/DataChart';
+import chartLoader from '../../Lottie/chartLoader.json'
+import Lottie from 'react-lottie';
 
 function Index() {
   const { sendGetRequest } = useHttp();
@@ -26,7 +28,19 @@ function Index() {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [alert, setAlert] = useState([]);
-  const [dataTime, setDataTime] = useState([])
+  const [dataTime, setDataTime] = useState([]);
+  const [loadingData, setLoadingData] = useState(false);
+  const [loadingDataOption, setLoadingDataOption] = useState(false);
+  const [textDataTime, setTextDataTime] = useState('');
+
+  const defaultOptions= {
+    loop: true,
+    autoplay: true,
+    animationData: chartLoader,  
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  }
 
   const thresholds = [
     { value: 50, color: '#FF0000' },
@@ -34,12 +48,11 @@ function Index() {
     { value: 0, color: '#1E90FF' }
   ];
 
-
   const generateMockHistoricalData = (startTime, numPoints, intervalSeconds) => {
     const historicalData = [];
     for (let i = 0; i < numPoints; i++) {
       historicalData.push({
-        timestamp: startTime + i * intervalSeconds * 1000,
+        timestamp: startTime + i * intervalSeconds * 1000
       });
     }
     return historicalData;
@@ -51,28 +64,24 @@ function Index() {
       const { currentTemperature, currentConcentration } = response;
 
       const now = Date.now();
-      const historicalTemperatureData = generateMockHistoricalData(
-        now - 300000,
-        60,
-        30
-      );
+      const historicalTemperatureData = generateMockHistoricalData(now - 300000, 60, 30);
 
       setDataGauge({
         gasTemperature: {
           value: currentTemperature,
-          percentage: Math.min((currentTemperature / 100) * 100, 100),
+          percentage: Math.min((currentTemperature / 100) * 100, 100)
         },
         gasLevel: {
           value: currentConcentration,
-          percentage: Math.min((currentConcentration / 300) * 100, 100),
-        },
+          percentage: Math.min((currentConcentration / 300) * 100, 100)
+        }
       });
 
       setCategoriesTime((prevCategories) => [
         ...prevCategories,
         ...historicalTemperatureData.map((dataPoint) =>
           new Date(dataPoint.timestamp).toLocaleTimeString()
-        ),
+        )
       ]);
 
       const temperatureData = historicalTemperatureData.map((dataPoint) =>
@@ -82,15 +91,15 @@ function Index() {
       setInitialSeriesData((prevSeriesData) => {
         const updatedTemperatureSeries = {
           name: 'Gas Temperature',
-          data: [...(prevSeriesData[0]?.data || []), ...temperatureData],
+          data: [...(prevSeriesData[0]?.data || []), ...temperatureData]
         };
 
         const updatedGasLevelSeries = {
           name: 'Gas Level (PPM)',
           data: [
             ...(prevSeriesData[1]?.data || []),
-            ...Array(historicalTemperatureData.length).fill(currentConcentration),
-          ],
+            ...Array(historicalTemperatureData.length).fill(currentConcentration)
+          ]
         };
 
         return [updatedTemperatureSeries, updatedGasLevelSeries];
@@ -98,64 +107,11 @@ function Index() {
 
       setLatestReading([currentTemperature, currentConcentration]);
       setLatestReadingTemp([currentTemperature]);
-      setLatestReadingConc([currentConcentration])
+      setLatestReadingConc([currentConcentration]);
     } catch (error) {
       console.error('Error fetching device data:', error);
     }
   };
-
-
-
-
-  // const fetchDeviceData = async () => {
-  //   try {
-  //     const response = await sendGetRequest(`getDeviceStats/?id=${id}`);
-  //     const { currentTemperature, currentConcentration, historicalTemperatureData } = response;
-
-  //     setDataGauge({
-  //       gasTemperature: {
-  //         value: currentTemperature,
-  //         percentage: Math.min((currentTemperature / 100) * 100, 100)
-  //       },
-  //       gasLevel: {
-  //         value: currentConcentration,
-  //         percentage: Math.min((currentConcentration / 300) * 100, 100)
-  //       }
-  //     });
-
-  //     setCategoriesTime((prevCategories) => [
-  //       ...prevCategories,
-  //       ...historicalTemperatureData.map((dataPoint) =>
-  //         new Date(dataPoint.timestamp).toLocaleTimeString()
-  //       )
-  //     ]);
-
-  //     const temperatureData = historicalTemperatureData.map((dataPoint) =>
-  //       parseFloat(dataPoint.temperature)
-  //     );
-
-  //     setInitialSeriesData((prevSeriesData) => {
-  //       const updatedTemperatureSeries = {
-  //         name: 'Gas Temperature',
-  //         data: [...(prevSeriesData[0]?.data || []), ...temperatureData]
-  //       };
-
-  //       const updatedGasLevelSeries = {
-  //         name: 'Gas Level (PPM)',
-  //         data: [
-  //           ...(prevSeriesData[1]?.data || []),
-  //           ...Array(historicalTemperatureData.length).fill(currentConcentration)
-  //         ]
-  //       };
-
-  //       return [updatedTemperatureSeries, updatedGasLevelSeries];
-  //     });
-
-  //     setLatestReading([currentTemperature, currentConcentration]);
-  //   } catch (error) {
-  //     console.error('Error fetching device data:', error);
-  //   }
-  // };
 
   const fetchAlert = async (device_id) => {
     console.log(device_id);
@@ -166,18 +122,19 @@ function Index() {
 
   useEffect(() => {
     fetchAlert(id);
+    setLoadingData(true);
   }, [id]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (selectedOption !== 'view_option3') {
+        setLoadingData(false);
         fetchDeviceData();
       }
     }, 30000);
 
     return () => clearInterval(intervalId);
   }, [id, selectedOption]);
-
 
   useEffect(() => {
     if (!dataGauge) {
@@ -191,20 +148,20 @@ function Index() {
         {
           name: 'Gas Temperature',
           data: Array.from({ length: 7 }, () => 0),
-          color: '#1E90FF', 
+          color: '#1E90FF'
         },
         {
           name: 'Gas Level (PPM)',
           data: Array.from({ length: 7 }, () => 0),
-          color: '#FF4500', 
-        },
+          color: '#FF4500'
+        }
       ]);
 
       setInitialSeriesDataTemp([
         {
           name: 'Gas Temperature',
           data: Array.from({ length: 7 }, () => 0),
-          color: '#1E90FF', 
+          color: '#1E90FF'
         }
       ]);
 
@@ -212,11 +169,9 @@ function Index() {
         {
           name: 'Gas Level (PPM)',
           data: Array.from({ length: 7 }, () => 0),
-          color: '#FF4500', 
-        },
+          color: '#FF4500'
+        }
       ]);
-
-
     }
   }, [dataGauge]);
 
@@ -229,51 +184,53 @@ function Index() {
   // },[categoriesTime])
 
   useEffect(() => {
-    console.log(selectedOption)
-  }, [selectedOption])
+    console.log(selectedOption);
+  }, [selectedOption]);
 
+  useEffect(() => {
+    setTextDataTime('Select a date for showing data');
+  }, []);
 
+  const convertToSeconds = (datetime) => {
+    return Math.floor(new Date(datetime).getTime() / 1000);
+  };
 
   const fetchTimeFrameData = async () => {
+    setLoadingDataOption(true);
     if (!startTime || !endTime) {
       alert('Please select both start and end times');
       return;
     }
 
     try {
+      // Extract date and time components
+      const date = startTime.split('T')[0]; // Extract date (YYYY-MM-DD)
+      const startTimeFormatted = startTime.split('T')[1]; // Extract time (HH:MM:SS)
+      const endTimeFormatted = endTime.split('T')[1]; // Extract time (HH:MM:SS)
+      setDataTime([]);
       // Prepare payload
       const payload = {
-        date: startTime.split('T')[0],
-        startTime: `${startTime.split('T')[1]}:00`,
-        endTime: `${endTime.split('T')[1]}:00`,
+        date,
+        startTime: startTimeFormatted,
+        endTime: endTimeFormatted
       };
 
+      console.log(payload);
 
-      console.log(payload)
+      // Send request with formatted data
+      const response = await sendPostRequest(`getAllData/${id}`, payload);
 
-      const response = await sendPostRequest(`getAllData/${id}`, {
-        date: startTime.split('T')[0],
-        startTime: `${startTime.split('T')[1]}:00`,
-        endTime: `${endTime.split('T')[1]}:00`
-      })
-
-      console.log(response)
-
-      console.log(response.data)
-
-      setDataTime(response.data)
-
+      console.log(response);
+      console.log(response.data);
+      if (response.message !== 'No data found for the given device ID and filters.')
+        setDataTime(response.data);
+      else setTextDataTime(response.message);
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      setLoadingDataOption(false);
     }
   };
-
-
-
-
-
-
-
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
@@ -308,118 +265,154 @@ function Index() {
         </button>
       )}
 
-
-      {(selectedOption === 'view_option1' || selectedOption === 'view_option2') &&
+      {(selectedOption === 'view_option1' || selectedOption === 'view_option2') && (
         <>
-          <div className='flex w-[100%] gap-2' >
-            <div className='w-[50%]'>
-              {categoriesTime.length > 0 && initialSeriesData.length > 0 && (
-                <TrendsCharts
-                  title="Dynamic Trends Chart For Temperature"
-                  subtitle="Values updated dynamically temperature"
-                  categories={categoriesTime}
-                  initialSeriesData={initialSeriesDataTemp}
-                  latestReading={latestReadingTemp}
-                  thresholds={thresholds}
-                />
-              )}
+          {true ? (
+            <div className='bg-[#fff] h-[60vh] rounded-lg flex flex-col justify-center items-center'>
+            <Lottie options={defaultOptions} height={300} width={300} />
+            <div className='text-[2rem] font-[600] poppins'>Loading...</div>
             </div>
-            <div className='w-[50%]'>
-              {categoriesTime.length > 0 && initialSeriesData.length > 0 && (
-                <TrendsCharts
-                  title="Dynamic Trends Chart For Concentration"
-                  subtitle="Values updated dynamically concentration"
-                  categories={categoriesTime}
-                  initialSeriesData={initialSeriesDataConc}
-                  latestReading={latestReadingConc}
-                  thresholds={thresholds}
-                />
-              )}
-            </div>
-          </div>
-
-
-          <div className="block gap-5 lg:flex">
-            <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
-              {dataGauge && (
-                <div className="block md:flex md:justify-between ">
-                  <GaugeView
-                    title="Board Temperature"
-                    value={dataGauge.gasTemperature.value}
-                    unit="°C"
-                    percentage={dataGauge.gasTemperature.percentage}
-                    thresholds={{ low: 30, high: 60 }}
-                  />
-                  <GaugeView
-                    title="Gas Level (PPM)"
-                    value={dataGauge.gasLevel.value}
-                    unit="ppm"
-                    percentage={dataGauge.gasLevel.percentage}
-                    thresholds={{ low: 100, high: 200 }}
-                  />
+          ) : (
+            <>
+              <div className="flex w-[100%] gap-2">
+                <div className="w-[50%]">
+                  {categoriesTime.length > 0 && initialSeriesData.length > 0 && (
+                    <TrendsCharts
+                      title="Dynamic Trends Chart For Temperature"
+                      subtitle="Values updated dynamically temperature"
+                      categories={categoriesTime}
+                      initialSeriesData={initialSeriesDataTemp}
+                      latestReading={latestReadingTemp}
+                      thresholds={thresholds}
+                    />
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="flex-1">
-              {categoriesTime.length > 0 && initialSeriesData.length > 0 && (
-                <TrendsCharts
-                  title="Dynamic Trends Chart"
-                  subtitle="Values updated dynamically"
-                  categories={categoriesTime}
-                  initialSeriesData={initialSeriesData}
-                  latestReading={latestReading}
-                  thresholds={thresholds}
-                />
-              )}
-            </div>
-          </div>
+                <div className="w-[50%]">
+                  {categoriesTime.length > 0 && initialSeriesData.length > 0 && (
+                    <TrendsCharts
+                      title="Dynamic Trends Chart For Concentration"
+                      subtitle="Values updated dynamically concentration"
+                      categories={categoriesTime}
+                      initialSeriesData={initialSeriesDataConc}
+                      latestReading={latestReadingConc}
+                      thresholds={thresholds}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div className="block gap-5 lg:flex">
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '20px',
+                    justifyContent: 'center',
+                    marginTop: '20px'
+                  }}>
+                  {dataGauge && (
+                    <div className="block md:flex md:justify-between ">
+                      <GaugeView
+                        title="Board Temperature"
+                        value={dataGauge.gasTemperature.value}
+                        unit="°C"
+                        percentage={dataGauge.gasTemperature.percentage}
+                        thresholds={{ low: 30, high: 60 }}
+                      />
+                      <GaugeView
+                        title="Gas Level (PPM)"
+                        value={dataGauge.gasLevel.value}
+                        unit="ppm"
+                        percentage={dataGauge.gasLevel.percentage}
+                        thresholds={{ low: 100, high: 200 }}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  {categoriesTime.length > 0 && initialSeriesData.length > 0 && (
+                    <TrendsCharts
+                      title="Dynamic Trends Chart"
+                      subtitle="Values updated dynamically"
+                      categories={categoriesTime}
+                      initialSeriesData={initialSeriesData}
+                      latestReading={latestReading}
+                      thresholds={thresholds}
+                    />
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </>
-      }
+      )}
 
       {selectedOption === 'view_option3' && (
         <>
           <div className="flex items-center gap-4">
             <input
               type="datetime-local"
+              step="1" // Enables seconds input
               onChange={(e) => setStartTime(e.target.value)}
               className="border rounded px-2 py-1"
             />
             <input
               type="datetime-local"
+              step="1" // Enables seconds input
               onChange={(e) => setEndTime(e.target.value)}
               className="border rounded px-2 py-1"
             />
             <button
               onClick={fetchTimeFrameData}
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Fetch Data
+              className="px-4 py-2 bg-blue-500 text-white rounded">
+              {loadingDataOption ? 'Fetching...' : 'Fetch Data'}
             </button>
           </div>
 
           <button
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => window.print()}>
-          Print Page
-        </button>
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            onClick={() => window.print()}>
+            Print Page
+          </button>
 
+          <div>
+            {loadingDataOption ? (
+              <Lottie options={defaultOptions} height={300} width={300} />
+            ) : (
+              <>
+                {dataTime.length > 0 ? (
+                  <div className="flex-row lg:flex  gap-2">
+                    {dataTime.length > 0 && (
+                      <div className="w-[100%] lg:w-[50%] h-[300px]  rounded-lg overflow-hidden bg-[#fff]">
+                        <DataChart
+                          data={dataTime}
+                          label={'Temperature (°C)'}
+                          text={'Temperature vs. Time'}
+                          text1={'Time (HH:MM:SS)'}
+                          text2={'Temperature (°C)'}
+                        />
+                      </div>
+                    )}
 
-          <div className='flex-row lg:flex  gap-2'>
-            {dataTime.length > 0 ? <div className='w-[100%] lg:w-[50%] h-[300px]  rounded-lg overflow-hidden bg-[#fff]'>
-              <DataChart data={dataTime} label={'Temperature (°C)'} text={'Temperature vs. Time'} text1={'Time (HH:MM:SS)'} text2={'Temperature (°C)'}/>
-            </div> : <p>No data to display</p>}
-
-            {dataTime.length > 0 ? <div className='w-[100%] mt-10 lg:mt-0 lg:w-[50%] h-[300px]  rounded-lg overflow-hidden bg-[#fff]'>
-              <DataChart data={dataTime} label={'Concentration (PPM)'} text={'Concentration vs. Time'} text1={'Time (HH:MM:SS)'} text2={'Concentration (PPM)'}/>
-            </div> : <p></p>}
+                    {dataTime.length > 0 && (
+                      <div className="w-[100%] mt-10 lg:mt-0 lg:w-[50%] h-[300px]  rounded-lg overflow-hidden bg-[#fff]">
+                        <DataChart
+                          data={dataTime}
+                          label={'Concentration (PPM)'}
+                          text={'Concentration vs. Time'}
+                          text1={'Time (HH:MM:SS)'}
+                          text2={'Concentration (PPM)'}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className='w-full flex justify-center items-center text-[#a85e5e] text-[2rem] font-[700] h-[50vh]'>{textDataTime}</p>
+                )}
+              </>
+            )}
           </div>
-
         </>
       )}
-
-
-
-
     </div>
   );
 }
