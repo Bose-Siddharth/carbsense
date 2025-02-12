@@ -44,8 +44,8 @@ function Index() {
 
   const thresholds = [
     { value: 50, color: '#FF0000' },
-    { value: 20, color: '#FFA500' },
-    { value: 0, color: '#1E90FF' }
+    { value: 20, color: '#1E90FF' },
+    { value: 0, color: '#FFA500' }
   ];
 
   const generateMockHistoricalData = (startTime, numPoints, intervalSeconds) => {
@@ -58,14 +58,77 @@ function Index() {
     return historicalData;
   };
 
+
+  // const fetchDeviceData = async () => {
+  //   // setLoadingData(true)
+  //   try {
+  //     const response = await sendGetRequest(`getDeviceStats/?id=${id}`);
+  //     const { currentTemperature, currentConcentration } = response;
+
+  //     const now = Date.now();
+  //     const historicalTemperatureData = generateMockHistoricalData(now - 300000, 60, 30);
+
+  //     setDataGauge({
+  //       gasTemperature: {
+  //         value: currentTemperature,
+  //         percentage: Math.min((currentTemperature / 100) * 100, 100)
+  //       },
+  //       gasLevel: {
+  //         value: currentConcentration,
+  //         percentage: Math.min((currentConcentration / 300) * 100, 100)
+  //       }
+  //     });
+
+  //     setCategoriesTime((prevCategories) => [
+  //       ...prevCategories,
+  //       ...historicalTemperatureData.map((dataPoint) =>
+  //         new Date(dataPoint.timestamp).toLocaleTimeString()
+  //       )
+  //     ]);
+
+  //     const temperatureData = historicalTemperatureData.map((dataPoint) =>
+  //       parseFloat(dataPoint.temperature)
+  //     );
+
+  //     setInitialSeriesData((prevSeriesData) => {
+  //       const updatedTemperatureSeries = {
+  //         name: 'Gas Temperature',
+  //         data: [...(prevSeriesData[0]?.data || []), ...temperatureData]
+  //       };
+
+  //       const updatedGasLevelSeries = {
+  //         name: 'Gas Level (PPM)',
+  //         data: [
+  //           ...(prevSeriesData[1]?.data || []),
+  //           ...Array(historicalTemperatureData.length).fill(currentConcentration)
+  //         ]
+  //       };
+
+  //       return [updatedTemperatureSeries, updatedGasLevelSeries];
+  //     });
+
+     
+      
+
+  //     setLatestReading([currentTemperature, currentConcentration]);
+  //     setLatestReadingTemp([currentTemperature]);
+  //     setLatestReadingConc([currentConcentration]);
+  //   } catch (error) {
+  //     console.error('Error fetching device data:', error);
+  //   }
+  //   finally{
+  //     setLoadingData(false);
+  //   }
+  // };
+
   const fetchDeviceData = async () => {
     try {
       const response = await sendGetRequest(`getDeviceStats/?id=${id}`);
       const { currentTemperature, currentConcentration } = response;
-
+  
       const now = Date.now();
       const historicalTemperatureData = generateMockHistoricalData(now - 300000, 60, 30);
-
+  
       setDataGauge({
         gasTemperature: {
           value: currentTemperature,
@@ -76,24 +139,24 @@ function Index() {
           percentage: Math.min((currentConcentration / 300) * 100, 100)
         }
       });
-
+  
       setCategoriesTime((prevCategories) => [
         ...prevCategories,
         ...historicalTemperatureData.map((dataPoint) =>
           new Date(dataPoint.timestamp).toLocaleTimeString()
         )
       ]);
-
-      const temperatureData = historicalTemperatureData.map((dataPoint) =>
-        parseFloat(dataPoint.temperature)
-      );
-
+  
+      const temperatureData = [
+        ...historicalTemperatureData.map(() => currentTemperature)
+      ];
+  
       setInitialSeriesData((prevSeriesData) => {
         const updatedTemperatureSeries = {
           name: 'Gas Temperature',
           data: [...(prevSeriesData[0]?.data || []), ...temperatureData]
         };
-
+  
         const updatedGasLevelSeries = {
           name: 'Gas Level (PPM)',
           data: [
@@ -101,17 +164,21 @@ function Index() {
             ...Array(historicalTemperatureData.length).fill(currentConcentration)
           ]
         };
-
+  
         return [updatedTemperatureSeries, updatedGasLevelSeries];
       });
-
-      setLatestReading([currentTemperature, currentConcentration]);
+  
+      // Set the temperature in both places
       setLatestReadingTemp([currentTemperature]);
-      setLatestReadingConc([currentConcentration]);
+      setLatestReading([currentTemperature, currentConcentration]);
     } catch (error) {
       console.error('Error fetching device data:', error);
+    } finally {
+      setLoadingData(false);
     }
   };
+  
+
 
   const fetchAlert = async (device_id) => {
     console.log(device_id);
@@ -128,7 +195,7 @@ function Index() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (selectedOption !== 'view_option3') {
-        setLoadingData(false);
+        // setLoadingData(false);
         fetchDeviceData();
       }
     }, 30000);
@@ -267,7 +334,7 @@ function Index() {
 
       {(selectedOption === 'view_option1' || selectedOption === 'view_option2') && (
         <>
-          {true ? (
+          {loadingData ? (
             <div className='bg-[#fff] h-[60vh] rounded-lg flex flex-col justify-center items-center'>
             <Lottie options={defaultOptions} height={300} width={300} />
             <div className='text-[2rem] font-[600] poppins'>Loading...</div>
